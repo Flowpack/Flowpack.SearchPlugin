@@ -1,0 +1,29 @@
+prototype(Flowpack.SearchPlugin:SingleResult) < prototype(TYPO3.TypoScript:Case) {
+	default {
+		condition = Flowpack.SearchPlugin:CanRender {
+			type = ${node.nodeType.name + 'SearchResult'}
+		}
+		condition = TRUE
+		type = ${node.nodeType.name + 'SearchResult'}
+	}
+
+	fallback {
+		condition = TRUE
+		type = 'TYPO3.Neos:DocumentSearchResult'
+	}
+}
+
+prototype(TYPO3.Neos:DocumentSearchResult) < prototype(TYPO3.TypoScript:Template) {
+	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/SearchResult/DocumentSearchResult.html'
+	node = ${node}
+
+	title = ${q(node).property('title')}
+	description = ''
+}
+
+prototype(TYPO3.Neos.NodeTypes:PageSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult)
+
+
+prototype(TYPO3.NeosDemoTypo3Org:ChapterSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult) {
+	description = ${q(node).property('chapterDescription')}
+}
