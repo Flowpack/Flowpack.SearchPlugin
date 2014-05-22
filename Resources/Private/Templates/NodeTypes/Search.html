@@ -1,0 +1,21 @@
+{namespace neos=TYPO3\Neos\ViewHelpers}
+{namespace ts=TYPO3\TypoScript\ViewHelpers}
+SEARCs {searchWord}
+<div class="search-results">
+	<f:if condition="{searchResults -> f:count()}">
+		<dl>
+			<f:for each="{searchResults}" as="searchResult">
+				<f:alias map="{documentNode: '{ts:render(path: \'searchResultDocument\', context: {searchResult: \'{searchResult}\'})}'}">
+					<f:if condition="{documentNode}">
+						<dt>
+							<neos:link.node node="{documentNode}">{documentNode.fullLabel}</neos:link.node>
+						</dt>
+						<dd>
+							<ts:render path="searchResultContentRenderer" context="{node: searchResult}" />
+						</dd>
+					</f:if>
+				</f:alias>
+			</f:for>
+		</dl>
+	</f:if>
+</div>

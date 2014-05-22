@@ -1,0 +1,15 @@
+prototype(Flowpack.Search:Search) {
+	searchResults = ${Search.query(site).fulltext(request.arguments.search).execute()}
+	searchWord = "foo"
+
+	searchResultDocument = ${searchResult ? q(searchResult).closest('[instanceof TYPO3.Neos:Document]').get(0) : null}
+
+	searchResultContentRenderer = ${String.crop(String.stripTags(q(node).property('title') + q(node).property('text')), 300) + '...'}
+
+	@cache {
+		mode = 'uncached'
+		context {
+			1 = 'site'
+		}
+	}
+}

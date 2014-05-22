@@ -1,0 +1,5 @@
+'Flowpack.SearchPlugin:Search':
+  superTypes: ['TYPO3.Neos:Content']
+  ui:
+    label: 'Search'
+    icon: 'icon-search'
