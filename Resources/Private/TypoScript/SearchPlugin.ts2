@@ -30,6 +30,7 @@ prototype(Flowpack.SearchPlugin:Search) {
 
 
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Template) {
+	node = ${site}
 	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
 	searchWord = ${request.arguments.search}
 }

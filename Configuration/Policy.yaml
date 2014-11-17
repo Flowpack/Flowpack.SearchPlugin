@@ -1,0 +1,11 @@
+privilegeTargets:
+  TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege:
+    Flowpack_SearchPlugin_Controller_SuggestController:
+      matcher: method(Flowpack\SearchPlugin\Controller\SuggestController->indexAction())
+
+roles:
+  'TYPO3.Flow:Everybody':
+    privileges:
+      -
+        privilegeTarget: Flowpack_SearchPlugin_Controller_SuggestController
+        permission: GRANT

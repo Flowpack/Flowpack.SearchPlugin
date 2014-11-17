@@ -1,0 +1,11 @@
+# DataSourceController routes
+-
+  name: 'flowpack/searchplugin - SuggestController->index'
+  uriPattern: 'flowpack/searchplugin'
+  defaults:
+    '@package':    'Flowpack.SearchPlugin'
+    '@controller': 'Suggest'
+    '@action':     'index'
+    '@format':     'json'
+  appendExceedingArguments: TRUE
+  httpMethods: ['GET']
