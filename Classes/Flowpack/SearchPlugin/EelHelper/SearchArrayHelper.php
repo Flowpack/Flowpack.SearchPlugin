@@ -1,6 +1,5 @@
 <?php
-namespace Flowpack\SearchPlugin\TypoScriptObjects;
-
+namespace Flowpack\SearchPlugin\EelHelper;
 
 /*                                                                                                  *
  * This script belongs to the TYPO3 Flow package "Flowpack.SearchPlugin".                           *
@@ -11,30 +10,38 @@ namespace Flowpack\SearchPlugin\TypoScriptObjects;
  *                                                                                                  *
  * The TYPO3 project - inspiring people to share!                                                   *
  *                                                                                                  */
-
 use TYPO3\Flow\Annotations as Flow;
-use TYPO3\TypoScript\TypoScriptObjects\AbstractTypoScriptObject;
+use TYPO3\Eel\ProtectedContextAwareInterface;
 
 /**
- * Class CanRenderImplementation
+ * Additional Array Helpers which might once
  *
+ * @Flow\Proxy(false)
  */
-class CanRenderImplementation extends AbstractTypoScriptObject {
+class SearchArrayHelper implements ProtectedContextAwareInterface {
 
 	/**
-	 * TypoScript Type which shall be rendered
-	 * @return string
-	 */
-	public function getType() {
-		return $this->tsValue('type');
-	}
-
-	/**
-	 * Evaluate this TypoScript object and return the result
+	 * Concatenate arrays or values to a new array
 	 *
-	 * @return mixed
+	 * @param array|mixed $array1 First array or value
+	 * @param array|mixed $array2 Second array or value
+	 * @param array|mixed $array_ Optional variable list of additional arrays / values
+	 * @return array The array with concatenated arrays or values
 	 */
-	public function evaluate() {
-		return $this->tsRuntime->canRender('/type<' . $this->getType() . '>');
+	public function flatten($arrays) {
+		$return = array();
+		array_walk_recursive($arrays, function($a) use (&$return) { $return[] = $a; });
+		return $return;
 	}
+
+	/**
+	 * All methods are considered safe
+	 *
+	 * @param string $methodName
+	 * @return boolean
+	 */
+	public function allowsCallOfMethod($methodName) {
+		return TRUE;
+	}
+
 }

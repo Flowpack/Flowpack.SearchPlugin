@@ -15,14 +15,11 @@ prototype(Flowpack.SearchPlugin:SingleResult) < prototype(TYPO3.TypoScript:Case)
 prototype(TYPO3.Neos:DocumentSearchResult) < prototype(TYPO3.TypoScript:Template) {
 	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/SearchResult/DocumentSearchResult.html'
 	node = ${node}
+	highlight = ${Flowpack.SearchPlugin.Array.flatten(searchHit.highlight)}
 
 	title = ${q(node).property('title')}
 	description = ''
+	parents = ${Array.reverse(q(node).parents('[instanceof TYPO3.Neos:Document]').get())}
 }
 
 prototype(TYPO3.Neos.NodeTypes:PageSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult)
-
-
-prototype(TYPO3.NeosDemoTypo3Org:ChapterSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult) {
-	description = ${q(node).property('chapterDescription')}
-}
