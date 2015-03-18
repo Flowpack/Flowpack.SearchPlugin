@@ -5,7 +5,7 @@ prototype(Flowpack.SearchPlugin:Search) {
 	@override.searchResults = ${this.searchQuery.execute()}
 
 
-	searchQuery = ${Search.query(site).fulltext(request.arguments.search)}
+	searchQuery = ${Search.query(site).fulltext(request.arguments.search || '')}
 
 	totalSearchResults = ${this.searchQuery.count()}
 	searchResults = ${searchResults}
