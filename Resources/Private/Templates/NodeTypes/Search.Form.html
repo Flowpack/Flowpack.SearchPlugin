@@ -1,4 +1,4 @@
-<form action="" method="GET">
-	<input type="text" name="search" value="{searchWord}" />
-	<button type="submit">Send</button>
+<form method="GET">
+	<input type="search" name="search" value="{searchWord}" placeholder="Search" data-autocomplete-source="{f:uri.action(action: 'index', controller: 'Suggest', package: 'Flowpack.SearchPlugin', format: 'json' absolute: 1, arguments: {node: node})}" />
+	<button type="submit">Search</button>
 </form>

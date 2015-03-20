@@ -3,3 +3,7 @@ TYPO3:
     typoScript:
       autoInclude:
         'Flowpack.SearchPlugin': TRUE
+
+  TypoScript:
+    defaultContext:
+      Flowpack.SearchPlugin.Array: 'Flowpack\SearchPlugin\EelHelper\SearchArrayHelper'
