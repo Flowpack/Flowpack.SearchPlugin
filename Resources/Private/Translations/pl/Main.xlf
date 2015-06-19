@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file original="" product-name="Flowpack.SearchPlugin" source-language="en" datatype="plaintext" target-language="pl">
+		<body>
+
+			<trans-unit id="search" xml:space="preserve">
+        		<source>Search</source>
+        		<target xml:lang="pl" state="translated">Szukaj</target>
+			</trans-unit>
+			<trans-unit id="searchShowingResults" xml:space="preserve">
+        		<source>Showing {0} of {1} results</source>
+        		<target xml:lang="pl" state="translated">Pokazuje {0} z {1} wyników</target>
+			</trans-unit>
+			<trans-unit id="path" xml:space="preserve">
+        		<source>Path</source>
+        		<target xml:lang="pl" state="translated">Ścieżka</target>
+			</trans-unit>
+
+    		</body>
+	</file>
+</xliff>
