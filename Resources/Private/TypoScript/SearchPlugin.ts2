@@ -7,16 +7,9 @@ prototype(Flowpack.SearchPlugin:Search) {
 
 	searchForm = Flowpack.SearchPlugin:Search.Form
 
-	searchResultRenderer = TYPO3.TypoScript:Collection {
-		// the "searchResults" are filled from the <search:widget.paginate> ViewHelper.
-		collection = ${searchResults}
-		itemRenderer = Flowpack.SearchPlugin:SingleResult
-		itemName = 'node'
-		// we also make the full ElasticSearch hit available to nested rendering, if possible
-		itemRenderer.@override.searchHit = ${searchResults.searchHitForNode(node)}
-	}
+	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer
 
-	searchResultRenderer.@process.wrap = ${'<ol>' + value + '</ol>'}
+    searchResultRenderer.@process.wrap = ${'<ol>' + value + '</ol>'}
 	prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
 
 	@cache {
@@ -33,4 +26,13 @@ prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Templa
 	node = ${site}
 	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
 	searchWord = ${request.arguments.search}
+}
+
+prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(TYPO3.TypoScript:Collection) {
+    // the "searchResults" are filled from the <search:widget.paginate> ViewHelper.
+    collection = ${searchResults}
+    itemRenderer = Flowpack.SearchPlugin:SingleResult
+    itemName = 'node'
+    // we also make the full ElasticSearch hit available to nested rendering, if possible
+    itemRenderer.@override.searchHit = ${searchResults.searchHitForNode(node)}
 }

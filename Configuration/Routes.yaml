@@ -9,3 +9,13 @@
     '@format':     'json'
   appendExceedingArguments: TRUE
   httpMethods: ['GET']
+-
+  name: 'flowpack/searchplugin - SuggestController->ajax'
+  uriPattern: 'flowpack/ajaxsearch'
+  defaults:
+    '@package':    'Flowpack.SearchPlugin'
+    '@controller': 'AjaxSearch'
+    '@action':     'search'
+    '@format':     'html'
+  appendExceedingArguments: TRUE
+  httpMethods: ['GET']
