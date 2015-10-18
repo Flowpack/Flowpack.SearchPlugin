@@ -1,0 +1,6 @@
+prototype(Flowpack.SearchPlugin:AjaxSearch) < prototype(TYPO3.TypoScript:Template) {
+	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/AjaxSearch.html'
+	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer {
+		@override.searchResults = ${Search.query(site).fulltext(request.arguments.q).execute()}
+	}
+}
