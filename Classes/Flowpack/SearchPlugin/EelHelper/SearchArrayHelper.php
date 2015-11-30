@@ -23,12 +23,14 @@ class SearchArrayHelper implements ProtectedContextAwareInterface {
 	/**
 	 * Concatenate arrays or values to a new array
 	 *
-	 * @param array|mixed $array1 First array or value
-	 * @param array|mixed $array2 Second array or value
-	 * @param array|mixed $array_ Optional variable list of additional arrays / values
+	 * @param array|mixed $arrays Arrays
 	 * @return array The array with concatenated arrays or values
 	 */
 	public function flatten($arrays) {
+		if (!is_array($arrays)) {
+			// might happen if $arrays is "null"
+			return $arrays;
+		}
 		$return = array();
 		array_walk_recursive($arrays, function($a) use (&$return) { $return[] = $a; });
 		return $return;
