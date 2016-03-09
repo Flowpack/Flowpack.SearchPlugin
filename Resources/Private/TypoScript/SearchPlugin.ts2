@@ -8,6 +8,12 @@ prototype(Flowpack.SearchPlugin:Search) {
 	searchForm = Flowpack.SearchPlugin:Search.Form
 
 	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer
+	configuration = TYPO3.TypoScript:RawArray {
+		itemsPerPage = 25
+		insertAbove = ${false}
+		insertBelow = ${true}
+		maximumNumberOfLinks = 10
+	}
 
     searchResultRenderer.@process.wrap = ${'<ol>' + value + '</ol>'}
 	prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
