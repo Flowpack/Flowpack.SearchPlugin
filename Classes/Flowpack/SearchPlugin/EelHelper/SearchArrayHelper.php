@@ -23,14 +23,16 @@ class SearchArrayHelper implements ProtectedContextAwareInterface {
 	/**
 	 * Concatenate arrays or values to a new array
 	 *
-	 * @param array|mixed $array1 First array or value
-	 * @param array|mixed $array2 Second array or value
-	 * @param array|mixed $array_ Optional variable list of additional arrays / values
+	 * @param array|mixed $arrays First array or value
 	 * @return array The array with concatenated arrays or values
 	 */
 	public function flatten($arrays) {
 		$return = array();
-		array_walk_recursive($arrays, function($a) use (&$return) { $return[] = $a; });
+		if (is_array($arrays)) {
+			array_walk_recursive($arrays, function ($a) use (&$return) {
+				$return[] = $a;
+			});
+		}
 		return $return;
 	}
 
@@ -41,7 +43,7 @@ class SearchArrayHelper implements ProtectedContextAwareInterface {
 	 * @return boolean
 	 */
 	public function allowsCallOfMethod($methodName) {
-		return TRUE;
+		return true;
 	}
 
 }
