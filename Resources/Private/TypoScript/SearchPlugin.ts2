@@ -8,8 +8,10 @@ prototype(Flowpack.SearchPlugin:Search) {
 	searchForm = Flowpack.SearchPlugin:Search.Form
 
 	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer
-
-    searchResultRenderer.@process.wrap = ${'<ol>' + value + '</ol>'}
+	searchResultRenderer = TYPO3.TypoScript:Tag {
+		tagName = 'ol'
+		content = Flowpack.SearchPlugin:SearchResultRenderer
+	}
 	prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
 
 	@cache {
