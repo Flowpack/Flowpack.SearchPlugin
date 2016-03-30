@@ -7,7 +7,13 @@ prototype(Flowpack.SearchPlugin:Search) {
 
 	searchForm = Flowpack.SearchPlugin:Search.Form
 
-	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer
+	configuration = TYPO3.TypoScript:RawArray {
+		itemsPerPage = 25
+		insertAbove = ${false}
+		insertBelow = ${true}
+		maximumNumberOfLinks = 10
+	}
+
 	searchResultRenderer = TYPO3.TypoScript:Tag {
 		tagName = 'ol'
 		content = Flowpack.SearchPlugin:SearchResultRenderer

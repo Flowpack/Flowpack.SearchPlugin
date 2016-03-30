@@ -6,7 +6,7 @@
 	{searchForm -> f:format.raw()}
 
 	<f:if condition="{searchQuery}">
-		<search:widget.paginate query="{searchQuery}" as="results">
+		<search:widget.paginate query="{searchQuery}" as="results" configuration="{configuration}">
 			{f:translate(id: 'searchShowingResults', package: 'Flowpack.SearchPlugin', arguments: '{0: results.accessibleCount, 1: totalSearchResults}')}
 			<ts:render path="searchResultRenderer" context="{searchResults: results}" />
 		</search:widget.paginate>
