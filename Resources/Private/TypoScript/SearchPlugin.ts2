@@ -7,7 +7,6 @@ prototype(Flowpack.SearchPlugin:Search) {
 
 	searchForm = Flowpack.SearchPlugin:Search.Form
 
-	searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer
 	configuration = TYPO3.TypoScript:RawArray {
 		itemsPerPage = 25
 		insertAbove = ${false}
@@ -15,7 +14,10 @@ prototype(Flowpack.SearchPlugin:Search) {
 		maximumNumberOfLinks = 10
 	}
 
-    searchResultRenderer.@process.wrap = ${'<ol>' + value + '</ol>'}
+	searchResultRenderer = TYPO3.TypoScript:Tag {
+		tagName = 'ol'
+		content = Flowpack.SearchPlugin:SearchResultRenderer
+	}
 	prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
 
 	@cache {
@@ -23,6 +25,7 @@ prototype(Flowpack.SearchPlugin:Search) {
 		context {
 			1 = 'site'
 			2 = 'node'
+			3 = 'documentNode'
 		}
 	}
 }
@@ -30,6 +33,7 @@ prototype(Flowpack.SearchPlugin:Search) {
 
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Template) {
 	node = ${site}
+
 	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
 	searchWord = ${request.arguments.search}
 }
