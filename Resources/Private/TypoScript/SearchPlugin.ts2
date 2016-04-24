@@ -2,7 +2,7 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(TYPO3.Neos:Content) {
 	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.html'
 
 	searchTerm = ${request.arguments.search}
-	searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm) : null}
+	searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm).nodeType('TYPO3.Neos:Document') : null}
 
 	totalSearchResults = ${this.searchQuery.count()}
 
