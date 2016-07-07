@@ -3,12 +3,12 @@
 {namespace search=TYPO3\TYPO3CR\Search\ViewHelpers}
 
 <div{attributes -> f:format.raw()}>
-	{searchForm -> f:format.raw()}
+    {searchForm -> f:format.raw()}
 
-	<f:if condition="{searchQuery}">
-		<search:widget.paginate query="{searchQuery}" as="results" configuration="{configuration}">
-			{f:translate(id: 'searchShowingResults', package: 'Flowpack.SearchPlugin', arguments: '{0: results.accessibleCount, 1: totalSearchResults}')}
-			<ts:render path="searchResultRenderer" context="{searchResults: results}" />
-		</search:widget.paginate>
-	</f:if>
+    <f:if condition="{searchQuery}">
+    <search:widget.paginate query="{searchQuery}" as="results" configuration="{configuration}">
+        {f:translate(id: 'searchShowingResults', package: 'Flowpack.SearchPlugin', arguments: '{0: results.accessibleCount, 1: totalSearchResults}')}
+        <ts:render path="searchResultRenderer" context="{searchResults: results}"/>
+    </search:widget.paginate>
+    </f:if>
 </div>

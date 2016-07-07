@@ -2,7 +2,7 @@ TYPO3:
   Neos:
     typoScript:
       autoInclude:
-        'Flowpack.SearchPlugin': TRUE
+        'Flowpack.SearchPlugin': true
 
   TypoScript:
     defaultContext:

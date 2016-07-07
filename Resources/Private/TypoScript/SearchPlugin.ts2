@@ -1,42 +1,41 @@
 prototype(Flowpack.SearchPlugin:Search) < prototype(TYPO3.Neos:Content) {
-	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.html'
+    templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.html'
 
-	searchTerm = ${request.arguments.search}
-	searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm) : null}
+    searchTerm = ${request.arguments.search}
+    searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm) : null}
 
-	totalSearchResults = ${this.searchQuery.count()}
+    totalSearchResults = ${this.searchQuery.count()}
 
-	searchForm = Flowpack.SearchPlugin:Search.Form
+    searchForm = Flowpack.SearchPlugin:Search.Form
 
-	configuration = TYPO3.TypoScript:RawArray {
-		itemsPerPage = 25
-		insertAbove = ${false}
-		insertBelow = ${true}
-		maximumNumberOfLinks = 10
-	}
+    configuration = TYPO3.TypoScript:RawArray {
+        itemsPerPage = 25
+        insertAbove = ${false}
+        insertBelow = ${true}
+        maximumNumberOfLinks = 10
+    }
 
-	searchResultRenderer = TYPO3.TypoScript:Tag {
-		tagName = 'ol'
-		content = Flowpack.SearchPlugin:SearchResultRenderer
-	}
-	prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
+    searchResultRenderer = TYPO3.TypoScript:Tag {
+        tagName = 'ol'
+        content = Flowpack.SearchPlugin:SearchResultRenderer
+    }
+    prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
 
-	@cache {
-		mode = 'uncached'
-		context {
-			1 = 'site'
-			2 = 'node'
-			3 = 'documentNode'
-		}
-	}
+    @cache {
+        mode = 'uncached'
+        context {
+            1 = 'site'
+            2 = 'node'
+            3 = 'documentNode'
+        }
+    }
 }
 
-
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Template) {
-	node = ${site}
+    node = ${site}
 
-	templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
-	searchWord = ${request.arguments.search}
+    templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
+    searchWord = ${request.arguments.search}
 }
 
 prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(TYPO3.TypoScript:Collection) {
@@ -45,5 +44,5 @@ prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(TYPO3.TypoScri
     itemRenderer = Flowpack.SearchPlugin:SingleResult
     itemName = 'node'
     // we also make the full ElasticSearch hit available to nested rendering, if possible
-    itemRenderer.@override.searchHit = ${searchResults.searchHitForNode(node)}
+    itemRenderer.@context.searchHit = ${searchResults.searchHitForNode(node)}
 }

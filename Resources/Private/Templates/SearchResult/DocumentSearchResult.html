@@ -3,17 +3,17 @@
 <neos:link.node node="{node}">{title}</neos:link.node>
 
 <f:if condition="{highlight}">
-	<p>
-		<f:for each="{highlight}" as="fragment" iteration="fragmentIterator">
-			{fragment -> f:format.raw()}{f:if(condition: fragmentIterator.isLast, else: '...')}
-		</f:for>
-	</p>
+    <p>
+        <f:for each="{highlight}" as="fragment" iteration="fragmentIterator">
+            {fragment -> f:format.raw()}{f:if(condition: fragmentIterator.isLast, else: '...')}
+        </f:for>
+    </p>
 
-	<div class="breadcrumb">
-		<span>{f:translate(id: 'path', package: 'Flowpack.SearchPlugin')}:</span>
-		<f:for each="{parents}" as="parent">
-			<neos:link.node node="{parent}" /> /
-		</f:for>
-		<neos:link.node node="{node}" />
-	</div>
+    <div class="breadcrumb">
+        <span>{f:translate(id: 'path', package: 'Flowpack.SearchPlugin')}:</span>
+        <f:for each="{parents}" as="parent">
+            <neos:link.node node="{parent}"/> /
+        </f:for>
+        <neos:link.node node="{node}"/>
+    </div>
 </f:if>

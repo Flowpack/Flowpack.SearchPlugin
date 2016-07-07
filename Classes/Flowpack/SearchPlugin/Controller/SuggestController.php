@@ -1,15 +1,15 @@
 <?php
 namespace Flowpack\SearchPlugin\Controller;
 
-/*                                                                                                  *
- * This script belongs to the TYPO3 Flow package "Flowpack.SearchPlugin".                           *
- *                                                                                                  *
- * It is free software; you can redistribute it and/or modify it under                              *
- * the terms of the GNU Lesser General Public License, either version 3                             *
- *  of the License, or (at your option) any later version.                                          *
- *                                                                                                  *
- * The TYPO3 project - inspiring people to share!                                                   *
- *                                                                                                  */
+/*
+ * This file is part of the Flowpack.SearchPlugin package.
+ *
+ * (c) Contributors of the Flowpack Team - flowpack.org
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
@@ -17,68 +17,66 @@ use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
 /**
  * Class SuggestController
- *
- * @author Jon Klixbüll Langeland <jon@moc.net>
- * @package Flowpack\SearchPlugin\Controller
  */
-class SuggestController extends ActionController {
+class SuggestController extends ActionController
+{
+    /**
+     * @Flow\Inject
+     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     */
+    protected $elasticSearchClient;
 
-	/**
-	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
-	 */
-	protected $elasticSearchClient;
+    /**
+     * The node inside which searching should happen
+     *
+     * @var NodeInterface
+     */
+    protected $contextNode;
 
-	/**
-	 * The node inside which searching should happen
-	 *
-	 * @var NodeInterface
-	 */
-	protected $contextNode;
+    /**
+     * @Flow\Inject
+     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\LoggerInterface
+     */
+    protected $logger;
 
-	/**
-	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\LoggerInterface
-	 */
-	protected $logger;
+    /**
+     * @var boolean
+     */
+    protected $logThisQuery = false;
 
-	/**
-	 * @var boolean
-	 */
-	protected $logThisQuery = FALSE;
+    /**
+     * @var string
+     */
+    protected $logMessage;
 
-	/**
-	 * @var string
-	 */
-	protected $logMessage;
+    /**
+     * @var array
+     */
+    protected $viewFormatToObjectNameMap = [
+        'json' => 'TYPO3\Flow\Mvc\View\JsonView'
+    ];
 
-	/**
-	 * @var array
-	 */
-	protected $viewFormatToObjectNameMap = array(
-		'json' => 'TYPO3\Flow\Mvc\View\JsonView'
-	);
+    /**
+     * @param NodeInterface $node
+     * @param string $term
+     * @return void
+     */
+    public function indexAction(NodeInterface $node, $term)
+    {
+        $request = [
+            'suggests' => [
+                'text' => $term,
+                'term' => [
+                    'field' => '_all'
+                ]
+            ]
+        ];
 
-	/**
-	 * @param NodeInterface $node
-	 * @param string $term
-	 */
-	public function indexAction(NodeInterface $node, $term) {
-		$request = array(
-			'suggests' => array(
-				'text' => $term,
-				'term' => array(
-					'field' => '_all'
-				)
-			)
-		);
+        $response = $this->elasticSearchClient->getIndex()->request('GET', '/_suggest', [], json_encode($request))->getTreatedContent();
+        $suggestions = array_map(function ($option) {
+            return $option['text'];
+        }, $response['suggests'][0]['options']);
 
-		$response = $this->elasticSearchClient->getIndex()->request('GET', '/_suggest', array(), json_encode($request))->getTreatedContent();
-		$suggestions = array_map(function($option) {
-			return $option['text'];
-		}, $response['suggests'][0]['options']);
-
-		$this->view->assign('value', $suggestions);
-	}
-
+        $this->view->assign('value', $suggestions);
+    }
 }
