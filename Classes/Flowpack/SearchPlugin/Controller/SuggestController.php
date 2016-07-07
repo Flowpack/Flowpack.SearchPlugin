@@ -13,7 +13,6 @@ namespace Flowpack\SearchPlugin\Controller;
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
-use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
 /**
  * Class SuggestController
@@ -27,29 +26,6 @@ class SuggestController extends ActionController
     protected $elasticSearchClient;
 
     /**
-     * The node inside which searching should happen
-     *
-     * @var NodeInterface
-     */
-    protected $contextNode;
-
-    /**
-     * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var boolean
-     */
-    protected $logThisQuery = false;
-
-    /**
-     * @var string
-     */
-    protected $logMessage;
-
-    /**
      * @var array
      */
     protected $viewFormatToObjectNameMap = [
@@ -57,11 +33,10 @@ class SuggestController extends ActionController
     ];
 
     /**
-     * @param NodeInterface $node
      * @param string $term
      * @return void
      */
-    public function indexAction(NodeInterface $node, $term)
+    public function indexAction($term)
     {
         $request = [
             'suggests' => [
@@ -72,7 +47,7 @@ class SuggestController extends ActionController
             ]
         ];
 
-        $response = $this->elasticSearchClient->getIndex()->request('GET', '/_suggest', [], json_encode($request))->getTreatedContent();
+        $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
         $suggestions = array_map(function ($option) {
             return $option['text'];
         }, $response['suggests'][0]['options']);
