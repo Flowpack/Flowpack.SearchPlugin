@@ -14,7 +14,21 @@ Make sure to include the Routes from this package into your main `Configuration/
         'SearchSubroutes':
           package: 'Flowpack.SearchPlugin'
 
-## Custom result rendering
+## Configuration
+
+
+### Pagination 
+
+The pagination search results can be configured via TypoScript. The following shows the defaults:
+
+    prototype(Flowpack.SearchPlugin:Search).configuration {
+        itemsPerPage = 25
+        insertAbove = ${false}
+        insertBelow = ${true}
+        maximumNumberOfLinks = 10
+    }
+
+### Custom result rendering
 
 The result list is rendered using a TypoScript object of type `nodeType + 'SearchResult'` for each hit.
 Thus you can easily adjust the rendering per type like this for an imaginary `Acme.AcmeCom:Product` nodetype:
@@ -30,7 +44,7 @@ Feel free to use the `DocumentSearchResult.html` in the Flowpack.SearchPlugin as
 The default search form template comes with a `data-autocomplete-source` attribute pointing to the 
 `SuggestController` of this package. Fed with a `term` parameter via a `GET` request, it returns a
 JSON-encoded array of suggestions from Elasticsearch. These are fetched with a term suggester from
-`_all` field, i.e. "the fulltext index".
+the `_all` field, i.e. "the fulltext index".
 
 These can be used to provide autocompletion on the search input using a JS library of your choice.
 In case you need to build the URI to the suggest controller yourself, this is what the form uses:
