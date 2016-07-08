@@ -36,3 +36,13 @@ These can be used to provide autocompletion on the search input using a JS libra
 In case you need to build the URI to the suggest controller yourself, this is what the form uses:
 
     {f:uri.action(action: 'index', controller: 'Suggest', package: 'Flowpack.SearchPlugin', format: 'json', absolute: 1)}
+
+## AJAX search
+
+The plugin comes with a controller that can be reached like this per default, using `GET`:
+
+    {f:uri.action(action: 'index', controller: 'AjaxSearch', package: 'Flowpack.SearchPlugin', absolute: 1)}
+
+It expects the search term as a parameter named `q` (as defined in `AjaxSearch.ts2`). This controller
+renders the search results and returns them as HTML without any of the page template. It can therefore
+be used to request search results via AJAX and display the result by adding it to the DOM as needed.
