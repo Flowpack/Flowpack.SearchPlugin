@@ -4,3 +4,69 @@
   ui:
     label: 'Search'
     icon: 'icon-search'
+
+'TYPO3.Neos:Document':
+  properties:
+    '__suggestions':
+      search:
+        elasticSearchMapping:
+          type: completion
+          context:
+            workspace:
+              type: category
+              path: '__workspace'
+            parentPath:
+              type: category
+              path: '__parentPath'
+            dimensionCombinationHash:
+              type: category
+              path: '__dimensionCombinationHash'
+        indexing: '${Flowpack.SearchPlugin.Suggestion.buildConfig(node.properties.title, node, 3)}'
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: string
+          analyzer: autocomplete
+        indexing: '${node.properties.title}'
+
+'TYPO3.Neos.NodeTypes:Text':
+  properties:
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: string
+          analyzer: autocomplete
+        indexing: '${node.properties.text}'
+
+'TYPO3.Neos.NodeTypes:Headline':
+  properties:
+    '__suggestions':
+      search:
+        elasticSearchMapping:
+          type: completion
+          context:
+            workspace:
+              type: category
+              path: '__workspace'
+            parentPath:
+              type: category
+              path: '__parentPath'
+            dimensionCombinationHash:
+              type: category
+              path: '__dimensionCombinationHash'
+        indexing: '${Flowpack.SearchPlugin.Suggestion.buildConfig(node.properties.title, node, 1)}'
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: string
+          analyzer: autocomplete
+        indexing: '${node.properties.title}'
+
+'TYPO3.Neos.NodeTypes:TextWithImage':
+  properties:
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: string
+          analyzer: autocomplete
+        indexing: '${node.properties.text}'
