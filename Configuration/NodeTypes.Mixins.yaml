@@ -1,0 +1,29 @@
+'Flowpack.SearchPlugin:SuggestableMixin':
+  abstract: true
+  properties:
+    '__suggestions':
+      search:
+        elasticSearchMapping:
+          type: completion
+          payloads: true
+          context:
+            workspace:
+              type: category
+              path: '__workspace'
+            parentPath:
+              type: category
+              path: '__parentPath'
+            dimensionCombinationHash:
+              type: category
+              path: '__dimensionCombinationHash'
+        indexing: "${Flowpack.SearchPlugin.Suggestion.buildConfig(q(node).property('title'), {nodeIdentifier: node.identifier}, 20)}"
+
+'Flowpack.SearchPlugin:AutocompletableMixin':
+  abstract: true
+  properties:
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: string
+          analyzer: autocomplete
+        indexing: "${q(node).property('title')}"

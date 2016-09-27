@@ -11,3 +11,25 @@ Neos:
     fusion:
       autoInclude:
         Flowpack.SearchPlugin: true
+  ContentRepository:
+    Search:
+      defaultContext:
+        Flowpack.SearchPlugin.Suggestion: Flowpack\SearchPlugin\EelHelper\SuggestionIndexHelper
+
+Flowpack:
+  ElasticSearch:
+    indexes:
+      default:
+        typo3cr:
+          analysis:
+            filter:
+              autocompleteFilter:
+                max_shingle_size: 5
+                min_shingle_size: 2
+                type: 'shingle'
+            analyzer:
+              autocomplete:
+                filter: [ 'lowercase', 'autocompleteFilter' ]
+                char_filter: [ 'html_strip' ]
+                type: 'custom'
+                tokenizer: 'standard'

@@ -11,18 +11,23 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
-use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryResult;
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
 
+/**
+ * Class SuggestController
+ */
 class SuggestController extends ActionController
 {
     /**
      * @Flow\Inject
-     * @var ElasticSearchClient
+     * @var ElasticSearchQueryBuilder
      */
-    protected $elasticSearchClient;
+    protected $elasticSearchQueryBuilder;
 
     /**
      * @var array
@@ -32,26 +37,81 @@ class SuggestController extends ActionController
     ];
 
     /**
+     * @param NodeInterface $contextNode
      * @param string $term
-     *
      * @return void
      */
-    public function indexAction($term)
+    public function indexAction(NodeInterface $contextNode, $term)
     {
-        $request = [
-            'suggests' => [
-                'text' => $term,
-                'term' => [
-                    'field' => '_all'
-                ]
-            ]
+        $result = [
+            'completions' => [],
+            'suggestions' => []
         ];
 
-        $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
-        $suggestions = array_map(function ($option) {
-            return $option['text'];
-        }, $response['suggests'][0]['options']);
+        if (!is_string($term)) {
+            $result['errors'] = ['term has to be a string'];
+            $this->view->assign('value', $result);
+            return;
+        }
 
-        $this->view->assign('value', $suggestions);
+        $term = strtolower($term);
+
+        // TODO: cache query by node identifier
+
+        /** @var ElasticSearchQueryBuilder $query */
+        $query = $this->elasticSearchQueryBuilder->query($contextNode);
+        $query
+            ->queryFilter('prefix', [
+                '__completion' => $term
+            ])
+            ->limit(0)
+            ->aggregation('autocomplete', [
+                'terms' => [
+                    'field' => '__completion',
+                    'order' => [
+                        '_count' => 'desc'
+                    ],
+                    'include' => [
+                        'pattern' => $term . '.*'
+                    ]
+                ]
+            ])
+            ->suggestions('suggestions', [
+                'text' => $term,
+                'completion' => [
+                    'field' => '__suggestions',
+                    'fuzzy' => true,
+                    'context' => [
+                        'parentPath' => $contextNode->getPath(),
+                        'workspace' => 'live',
+                        'dimensionCombinationHash' => md5(json_encode($contextNode->getContext()->getDimensions())),
+                    ]
+                ]
+            ]);
+
+        try {
+            /** @var ElasticSearchQueryResult $queryResult */
+            $queryResult = $query->execute();
+        } catch (\Exception $e) {
+            $result['errors'] = ['Could not execute query'];
+            $this->view->assign('value', $result);
+            return;
+        }
+
+        $aggregations = $queryResult->getAggregations();
+
+        // Extract autocomplete options
+        $autoCompletionOptions = array_map(function ($option) {
+            return $option['key'];
+        }, $aggregations['autocomplete']['buckets']);
+        $result['completions'] = $autoCompletionOptions;
+
+        // Extract suggestion options
+        $suggestionOptions = $queryResult->getSuggestions();
+        if (count($suggestionOptions['suggestions'][0]['options']) > 0) {
+            $result['suggestions'] = $suggestionOptions['suggestions'][0]['options'];
+        }
+
+        $this->view->assign('value', $result);
     }
 }

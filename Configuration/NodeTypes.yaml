@@ -4,3 +4,25 @@
   ui:
     label: 'Search'
     icon: 'icon-search'
+
+'Neos.Neos:Document':
+  superTypes:
+    'Flowpack.SearchPlugin:SuggestableMixin': true
+    'Flowpack.SearchPlugin:AutocompletableMixin': true
+
+'Neos.NodeTypes:TitleMixin':
+  superTypes:
+    'Flowpack.SearchPlugin:SuggestableMixin': true
+    'Flowpack.SearchPlugin:AutocompletableMixin': true
+
+'Neos.NodeTypes:TextMixin':
+  superTypes:
+    'Flowpack.SearchPlugin:SuggestableMixin': true
+    'Flowpack.SearchPlugin:AutocompletableMixin': true
+  properties:
+    '__completion':
+      search:
+        indexing: "${Flowpack.SearchPlugin.Suggestion.buildConfig(q(node).property('text'), {nodeIdentifier: node.identifier}, 10)}"
+    '__completion':
+      search:
+        indexing: "${q(node).property('text')}"
