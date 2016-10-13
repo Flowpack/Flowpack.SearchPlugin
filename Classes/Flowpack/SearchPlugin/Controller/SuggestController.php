@@ -11,8 +11,11 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryResult;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
+use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
 
 /**
  * Class SuggestController
@@ -21,9 +24,9 @@ class SuggestController extends ActionController
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     * @var ElasticSearchQueryBuilder
      */
-    protected $elasticSearchClient;
+    protected $elasticSearchQueryBuilder;
 
     /**
      * @var array
@@ -33,25 +36,58 @@ class SuggestController extends ActionController
     ];
 
     /**
+     * @param NodeInterface $contextNode
      * @param string $term
-     * @return void
      */
-    public function indexAction($term)
+    public function indexAction(NodeInterface $contextNode, $term)
     {
-        $request = [
-            'suggests' => [
-                'text' => $term,
-                'term' => [
-                    'field' => '_all'
+        /** @var ElasticSearchQueryBuilder $query */
+        $query = $this->elasticSearchQueryBuilder->query($contextNode);
+        /** @var ElasticSearchQueryResult $result */
+        $result = $query
+            ->queryFilter('prefix', [
+                '__completion' => $term
+            ])
+            ->limit(0)
+            ->aggregation('autocomplete', [
+                'terms' => [
+                    'field' => '__completion',
+                    'order' => [
+                        '_count' => 'desc'
+                    ],
+                    'include' => [
+                        'pattern' => $term . '.*'
+                    ]
                 ]
-            ]
-        ];
+            ])
+            ->suggestions('suggestions', [
+                'text' => $term,
+                'completion' => [
+                    'field' => '__suggestions',
+                    'fuzzy' => true,
+                    'context' => [
+                        'parentPath' => $contextNode->getPath(),
+                        'workspace' => array_unique(['live', $contextNode->getContext()->getWorkspace()->getName()]),
+                        'dimensionCombinationHash' => md5(json_encode($contextNode->getContext()->getDimensions())),
+                    ]
+                ]
+            ])
+            ->execute();
 
-        $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
-        $suggestions = array_map(function ($option) {
-            return $option['text'];
-        }, $response['suggests'][0]['options']);
+        $aggregations = $result->getAggregations();
+        $aggregationOptions = $aggregations['autocomplete']['buckets'];
 
-        $this->view->assign('value', $suggestions);
+        if (count($aggregationOptions) > 0) {
+            $options = array_map(function ($option) {
+                return $option['key'];
+            }, $aggregationOptions);
+        } else {
+            $suggestions = $result->getSuggestions();
+            $options = array_map(function ($option) {
+                return $option['text'];
+            }, $suggestions['options']);
+        }
+
+        $this->view->assign('value', $options);
     }
 }
