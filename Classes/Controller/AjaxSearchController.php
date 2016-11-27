@@ -13,7 +13,7 @@ namespace Flowpack\SearchPlugin\Controller;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
-use TYPO3\TYPO3CR\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 
 /**
  * Class AjaxSearchController
