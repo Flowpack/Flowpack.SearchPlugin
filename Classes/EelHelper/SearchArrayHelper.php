@@ -11,7 +11,7 @@ namespace Flowpack\SearchPlugin\EelHelper;
  * source code.
  */
 
-use TYPO3\Eel\ProtectedContextAwareInterface;
+use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 
 /**
