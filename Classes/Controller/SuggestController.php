@@ -11,8 +11,8 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Mvc\Controller\ActionController;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\Controller\ActionController;
 
 /**
  * Class SuggestController
@@ -29,7 +29,7 @@ class SuggestController extends ActionController
      * @var array
      */
     protected $viewFormatToObjectNameMap = [
-        'json' => 'TYPO3\Flow\Mvc\View\JsonView'
+        'json' => 'Neos\Flow\Mvc\View\JsonView'
     ];
 
     /**
