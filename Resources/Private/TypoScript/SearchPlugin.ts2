@@ -8,14 +8,14 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(TYPO3.Neos:Content) {
 
     searchForm = Flowpack.SearchPlugin:Search.Form
 
-    configuration = TYPO3.TypoScript:RawArray {
+    configuration = Neos.Fusion:RawArray {
         itemsPerPage = 25
         insertAbove = ${false}
         insertBelow = ${true}
         maximumNumberOfLinks = 10
     }
 
-    searchResultRenderer = TYPO3.TypoScript:Tag {
+    searchResultRenderer = Neos.Fusion:Tag {
         tagName = 'ol'
         content = Flowpack.SearchPlugin:SearchResultRenderer
     }
@@ -31,14 +31,14 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(TYPO3.Neos:Content) {
     }
 }
 
-prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Template) {
+prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Template) {
     node = ${site}
 
     templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
     searchWord = ${request.arguments.search}
 }
 
-prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(TYPO3.TypoScript:Collection) {
+prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(Neos.Fusion:Collection) {
     // the "searchResults" are filled from the <search:widget.paginate> ViewHelper.
     collection = ${searchResults}
     itemRenderer = Flowpack.SearchPlugin:SingleResult
