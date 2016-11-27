@@ -22,4 +22,4 @@ prototype(TYPO3.Neos:DocumentSearchResult) < prototype(Neos.Fusion:Template) {
     parents = ${Array.reverse(q(node).parents('[instanceof TYPO3.Neos:Document]').get())}
 }
 
-prototype(TYPO3.Neos.NodeTypes:PageSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult)
+prototype(Neos.NodeTypes:PageSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult)
