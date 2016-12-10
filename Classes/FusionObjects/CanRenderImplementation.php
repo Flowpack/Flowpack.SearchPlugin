@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\SearchPlugin\TypoScriptObjects;
+namespace Flowpack\SearchPlugin\FusionObjects;
 
 /*
  * This file is part of the Flowpack.SearchPlugin package.
@@ -12,13 +12,13 @@ namespace Flowpack\SearchPlugin\TypoScriptObjects;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Fusion\TypoScriptObjects\AbstractTypoScriptObject;
+use Neos\Fusion\FusionObjects\AbstractFusionObject;
 
 /**
  * Class CanRenderImplementation
  *
  */
-class CanRenderImplementation extends AbstractTypoScriptObject
+class CanRenderImplementation extends AbstractFusionObject
 {
     /**
      * TypoScript Type which shall be rendered
