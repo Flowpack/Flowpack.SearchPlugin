@@ -11,8 +11,8 @@ namespace Flowpack\SearchPlugin\TypoScriptObjects;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\TypoScript\TypoScriptObjects\AbstractTypoScriptObject;
+use Neos\Flow\Annotations as Flow;
+use Neos\Fusion\TypoScriptObjects\AbstractTypoScriptObject;
 
 /**
  * Class CanRenderImplementation
