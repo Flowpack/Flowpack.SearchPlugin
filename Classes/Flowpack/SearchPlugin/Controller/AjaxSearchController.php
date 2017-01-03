@@ -26,7 +26,7 @@ class AjaxSearchController extends ActionController
      * @var string
      * @api
      */
-    protected $defaultViewObjectName = \TYPO3\Neos\View\TypoScriptView::class;
+    protected $defaultViewObjectName = \Neos\Neos\View\TypoScriptView::class;
 
     /**
      * @param NodeInterface $node
@@ -34,7 +34,7 @@ class AjaxSearchController extends ActionController
      */
     public function searchAction(NodeInterface $node)
     {
-        /* @var $view \TYPO3\Neos\View\TypoScriptView */
+        /* @var $view \Neos\Neos\View\TypoScriptView */
         $view = $this->view;
         $view->setTypoScriptPath('ajaxSearch');
         $view->assign('value', $node);

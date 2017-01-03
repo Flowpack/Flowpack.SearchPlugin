@@ -1,6 +1,6 @@
 'Flowpack.SearchPlugin:Search':
   superTypes:
-    'TYPO3.Neos:Content': true
+    'Neos.Neos:Content': true
   ui:
     label: 'Search'
     icon: 'icon-search'
