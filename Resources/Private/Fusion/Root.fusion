@@ -1,4 +1,4 @@
-prototype(Flowpack.SearchPlugin:CanRender).@class = 'Flowpack\\SearchPlugin\\TypoScriptObjects\\CanRenderImplementation'
+prototype(Flowpack.SearchPlugin:CanRender).@class = 'Flowpack\\SearchPlugin\\FusionObjects\\CanRenderImplementation'
 
 include: SearchPlugin.ts2
 include: ResultRendering.ts2

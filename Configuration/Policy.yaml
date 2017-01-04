@@ -1,12 +1,12 @@
 privilegeTargets:
-  TYPO3\Flow\Security\Authorization\Privilege\Method\MethodPrivilege:
+  Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege:
     Flowpack_SearchPlugin_Controller_SuggestController:
       matcher: method(Flowpack\SearchPlugin\Controller\SuggestController->indexAction())
     Flowpack_SearchPlugin_Controller_AjaxSearchController:
       matcher: method(Flowpack\SearchPlugin\Controller\AjaxSearchController->searchAction())
 
 roles:
-  'TYPO3.Flow:Everybody':
+  'Neos.Flow:Everybody':
     privileges:
       -
         privilegeTarget: Flowpack_SearchPlugin_Controller_SuggestController

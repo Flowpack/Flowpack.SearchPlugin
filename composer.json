@@ -1,13 +1,15 @@
 {
     "name": "flowpack/searchplugin",
-    "type": "typo3-flow-package",
-    "description": "Add description here",
+    "type": "neos-package",
+    "description": "Plugin for search integration via content node",
     "require": {
-        "typo3/flow": "*"
+        "typo3/flow": "~4.0 || dev-master",
+        "flowpack/elasticsearch": "~2.0 || dev-master",
+        "neos/content-repository-search": "~3.0 || dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "Flowpack\\SearchPlugin": "Classes"
+        "psr-4": {
+            "Flowpack\\SearchPlugin\\": "Classes"
         }
     },
     "extra": {
@@ -38,7 +40,40 @@
             "TYPO3.Neos-20141218134700",
             "TYPO3.Fluid-20150214130800",
             "TYPO3.Neos-20150303231600",
-            "TYPO3.TYPO3CR-20150510103823"
+            "TYPO3.TYPO3CR-20150510103823",
+            "TYPO3.Flow-20151113161300",
+            "TYPO3.Form-20160601101500",
+            "TYPO3.Flow-20161115140400",
+            "TYPO3.Flow-20161115140430",
+            "Neos.Flow-20161124204700",
+            "Neos.Flow-20161124204701",
+            "Neos.Twitter.Bootstrap-20161124204912",
+            "Neos.Form-20161124205254",
+            "Neos.Flow-20161124224015",
+            "Neos.Party-20161124225257",
+            "Neos.Eel-20161124230101",
+            "Neos.Kickstart-20161124230102",
+            "Neos.Setup-20161124230842",
+            "Neos.Imagine-20161124231742",
+            "Neos.Media-20161124233100",
+            "Neos.NodeTypes-20161125002300",
+            "Neos.SiteKickstarter-20161125002311",
+            "Neos.Neos-20161125002322",
+            "Neos.ContentRepository-20161125012000",
+            "Neos.Fusion-20161125013710",
+            "Neos.Setup-20161125014759",
+            "Neos.SiteKickstarter-20161125095901",
+            "Neos.Fusion-20161125104701",
+            "Neos.NodeTypes-20161125104800",
+            "Neos.Neos-20161125104802",
+            "Neos.Kickstarter-20161125110814",
+            "Neos.Neos-20161125122412",
+            "Neos.Flow-20161125124112",
+            "TYPO3.FluidAdaptor-20161130112935",
+            "Neos.Fusion-20161201202543",
+            "Neos.Neos-20161201222211",
+            "Neos.Fusion-20161202215034",
+            "Neos.ContentRepository.Search-20161210231100"
         ]
     }
 }
