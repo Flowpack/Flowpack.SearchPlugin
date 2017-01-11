@@ -20,7 +20,7 @@ use TYPO3\Flow\Mvc\Controller\ActionController;
 class SuggestController extends ActionController
 {
     /**
-     * @Flow\Inject
+     * Dynamic dependency; to make the system work with SimpleSearch
      * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
      */
     protected $elasticSearchClient;
@@ -31,6 +31,13 @@ class SuggestController extends ActionController
     protected $viewFormatToObjectNameMap = [
         'json' => 'TYPO3\Flow\Mvc\View\JsonView'
     ];
+
+    public function initializeObject()
+    {
+        if ($this->objectManager->isRegistered('Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient')) {
+            $this->elasticSearchClient = $this->objectManager->get('Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient');
+        }
+    }
 
     /**
      * @param string $term
