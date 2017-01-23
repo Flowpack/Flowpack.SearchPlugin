@@ -26,7 +26,7 @@ class AjaxSearchController extends ActionController
      * @var string
      * @api
      */
-    protected $defaultViewObjectName = \Neos\Neos\View\TypoScriptView::class;
+    protected $defaultViewObjectName = \Neos\Neos\View\FusionView::class;
 
     /**
      * @param NodeInterface $node
@@ -34,9 +34,9 @@ class AjaxSearchController extends ActionController
      */
     public function searchAction(NodeInterface $node)
     {
-        /* @var $view \Neos\Neos\View\TypoScriptView */
+        /* @var $view \Neos\Neos\View\FusionView */
         $view = $this->view;
-        $view->setTypoScriptPath('ajaxSearch');
+        $view->setFusionPath('ajaxSearch');
         $view->assign('value', $node);
     }
 }
