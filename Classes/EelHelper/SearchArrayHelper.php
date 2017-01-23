@@ -25,6 +25,7 @@ class SearchArrayHelper implements ProtectedContextAwareInterface
      * Concatenate arrays or values to a new array
      *
      * @param array|mixed $arrays First array or value
+     *
      * @return array The array with concatenated arrays or values
      */
     public function flatten($arrays)
@@ -43,6 +44,7 @@ class SearchArrayHelper implements ProtectedContextAwareInterface
      * All methods are considered safe
      *
      * @param string $methodName
+     *
      * @return boolean
      */
     public function allowsCallOfMethod($methodName)

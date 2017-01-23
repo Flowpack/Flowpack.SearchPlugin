@@ -1,39 +1,33 @@
 # Flowpack.SearchPlugin
 
-This plugin is just a very bare-bones basis for a Search-Plugin, to be used together with
-Flowpack.ElasticSearch.ContentRepositoryAdaptor or Flowpack.SimpleSearch.ContentRepositoryAdaptor.
+This plugin is just a very bare-bones basis for a Search Plugin, to be used together with
+[Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor)
+or [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.SimpleSearch.ContentRepositoryAdaptor).
 
 ## Installation
 
-Make sure to include the Routes from this package into your main `Configuration/Routes.yaml` by the following snippet:
-
-    -
-      name: 'Flowpack.SearchPlugin'
-      uriPattern: '<SearchSubroutes>'
-      subRoutes:
-        'SearchSubroutes':
-          package: 'Flowpack.SearchPlugin'
+Inclusion of the routes from this package into your main `Configuration/Routes.yaml` is no longer needed as of Flow 4.0.
 
 ## Configuration
 
 
 ### Pagination 
 
-The pagination search results can be configured via TypoScript. The following shows the defaults:
+The pagination search results can be configured via Fusion. The following shows the defaults:
 
     prototype(Flowpack.SearchPlugin:Search).configuration {
         itemsPerPage = 25
-        insertAbove = ${false}
-        insertBelow = ${true}
+        insertAbove = false
+        insertBelow = true
         maximumNumberOfLinks = 10
     }
 
 ### Custom result rendering
 
-The result list is rendered using a TypoScript object of type `nodeType + 'SearchResult'` for each hit.
+The result list is rendered using a Fusion object of type `nodeType + 'SearchResult'` for each hit.
 Thus you can easily adjust the rendering per type like this for an imaginary `Acme.AcmeCom:Product` nodetype:
 
-    prototype(Acme.AcmeCom:ProductSearchResult) < prototype(TYPO3.Neos:DocumentSearchResult) {
+    prototype(Acme.AcmeCom:ProductSearchResult) < prototype(Neos.Neos:DocumentSearchResult) {
         templatePath = 'resource://Acme.AcmeCom/Private/Templates/SearchResult/ProductSearchResult.html'
     }
 
@@ -57,6 +51,6 @@ The plugin comes with a controller that can be reached like this per default, us
 
     {f:uri.action(action: 'index', controller: 'AjaxSearch', package: 'Flowpack.SearchPlugin', absolute: 1)}
 
-It expects the search term as a parameter named `q` (as defined in `AjaxSearch.ts2`). This controller
+It expects the search term as a parameter named `q` (as defined in `AjaxSearch.fusion`). This controller
 renders the search results and returns them as HTML without any of the page template. It can therefore
 be used to request search results via AJAX and display the result by adding it to the DOM as needed.

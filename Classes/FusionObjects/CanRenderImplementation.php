@@ -14,29 +14,25 @@ namespace Flowpack\SearchPlugin\FusionObjects;
 use Neos\Flow\Annotations as Flow;
 use Neos\Fusion\FusionObjects\AbstractFusionObject;
 
-/**
- * Class CanRenderImplementation
- *
- */
 class CanRenderImplementation extends AbstractFusionObject
 {
     /**
-     * TypoScript Type which shall be rendered
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->tsValue('type');
-    }
-
-    /**
-     * Evaluate this TypoScript object and return the result
+     * Evaluate this Fusion object and return the result
      *
      * @return mixed
      */
     public function evaluate()
     {
-        return $this->tsRuntime->canRender('/type<' . $this->getType() . '>');
+        return $this->runtime->canRender('/type<' . $this->getType() . '>');
+    }
+
+    /**
+     * Fusion Type which shall be rendered
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->fusionValue('type');
     }
 }

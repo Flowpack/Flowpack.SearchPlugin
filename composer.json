@@ -1,11 +1,16 @@
 {
     "name": "flowpack/searchplugin",
+    "license": "MIT",
     "type": "neos-package",
     "description": "Plugin for search integration via content node",
     "require": {
-        "typo3/flow": "~4.0 || dev-master",
-        "flowpack/elasticsearch": "~2.0 || dev-master",
-        "neos/content-repository-search": "~3.0 || dev-master"
+        "flowpack/elasticsearch-contentrepositoryadaptor": "^3.0",
+        "neos/content-repository": "^3.0",
+        "neos/content-repository-search": "^3.0",
+        "neos/eel": "^4.0",
+        "neos/flow": "^4.0",
+        "neos/fusion": "^3.0",
+        "neos/neos": "^3.0"
     },
     "autoload": {
         "psr-4": {

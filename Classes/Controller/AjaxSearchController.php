@@ -11,30 +11,29 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\Neos\View\FusionView;
 
-/**
- * Class AjaxSearchController
- */
 class AjaxSearchController extends ActionController
 {
     /**
-     * Override the default view from the ActionController to output TypoScript directly
+     * Override the default view from the ActionController to output Fusion directly
      *
      * @var string
      * @api
      */
-    protected $defaultViewObjectName = \Neos\Neos\View\FusionView::class;
+    protected $defaultViewObjectName = FusionView::class;
 
     /**
      * @param NodeInterface $node
+     *
      * @return void
      */
     public function searchAction(NodeInterface $node)
     {
-        /* @var $view \Neos\Neos\View\FusionView */
+        /* @var FusionView $view */
         $view = $this->view;
         $view->setFusionPath('ajaxSearch');
         $view->assign('value', $node);
