@@ -1,7 +1,7 @@
 prototype(Flowpack.SearchPlugin:CanRender).@class = 'Flowpack\\SearchPlugin\\FusionObjects\\CanRenderImplementation'
 
-include: SearchPlugin.ts2
-include: ResultRendering.ts2
-include: AjaxSearch.ts2
+include: SearchPlugin.fusion
+include: ResultRendering.fusion
+include: AjaxSearch.fusion
 
 ajaxSearch = Flowpack.SearchPlugin:AjaxSearch

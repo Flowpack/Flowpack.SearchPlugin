@@ -10,8 +10,8 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
 
     configuration = Neos.Fusion:RawArray {
         itemsPerPage = 25
-        insertAbove = ${false}
-        insertBelow = ${true}
+        insertAbove = false
+        insertBelow = true
         maximumNumberOfLinks = 10
     }
 

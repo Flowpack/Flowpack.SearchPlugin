@@ -2,7 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file original="" product-name="Flowpack.SearchPlugin" source-language="en" datatype="plaintext" target-language="de">
         <body>
-
             <trans-unit id="search" xml:space="preserve">
                 <source>Search</source>
                 <target xml:lang="de" state="translated">Suchen</target>

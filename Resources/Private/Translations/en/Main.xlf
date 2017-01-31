@@ -2,7 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file original="" product-name="Flowpack.SearchPlugin" source-language="en" datatype="plaintext">
         <body>
-
             <trans-unit id="search" xml:space="preserve">
                 <source>Search</source>
             </trans-unit>
@@ -12,7 +11,6 @@
             <trans-unit id="path" xml:space="preserve">
                 <source>Path</source>
             </trans-unit>
-
         </body>
     </file>
 </xliff>

@@ -7,7 +7,7 @@
     '@controller': 'Suggest'
     '@action':     'index'
     '@format':     'json'
-  appendExceedingArguments: TRUE
+  appendExceedingArguments: true
   httpMethods: ['GET']
 -
   name: 'flowpack/searchplugin - SuggestController->ajax'
@@ -17,5 +17,5 @@
     '@controller': 'AjaxSearch'
     '@action':     'search'
     '@format':     'html'
-  appendExceedingArguments: TRUE
+  appendExceedingArguments: true
   httpMethods: ['GET']

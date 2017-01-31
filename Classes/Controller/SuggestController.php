@@ -11,17 +11,16 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
+use Neos\Flow\Mvc\View\JsonView;
 
-/**
- * Class SuggestController
- */
 class SuggestController extends ActionController
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     * @var ElasticSearchClient
      */
     protected $elasticSearchClient;
 
@@ -29,11 +28,12 @@ class SuggestController extends ActionController
      * @var array
      */
     protected $viewFormatToObjectNameMap = [
-        'json' => 'Neos\Flow\Mvc\View\JsonView'
+        'json' => JsonView::class
     ];
 
     /**
      * @param string $term
+     *
      * @return void
      */
     public function indexAction($term)

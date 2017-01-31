@@ -7,7 +7,7 @@ prototype(Flowpack.SearchPlugin:SingleResult) < prototype(Neos.Fusion:Case) {
     }
 
     fallback {
-        condition = TRUE
+        condition = true
         type = 'Neos.Neos:DocumentSearchResult'
     }
 }
