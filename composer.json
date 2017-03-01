@@ -1,7 +1,7 @@
 {
     "name": "flowpack/searchplugin",
     "type": "typo3-flow-package",
-    "description": "Add description here",
+    "description": "Plugin for search integration via content node",
     "require": {
         "typo3/flow": "*"
     },
