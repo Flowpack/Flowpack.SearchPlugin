@@ -1,0 +1,9 @@
+Flowpack\SearchPlugin\Controller\SuggestController:
+  properties:
+    elasticSearchQueryTemplateCache:
+      object:
+        factoryObjectName: Neos\Flow\Cache\CacheManager
+        factoryMethodName: getCache
+        arguments:
+          1:
+            value: FlowPackSearchPlugin_ElasticSearchQueryTemplateCache

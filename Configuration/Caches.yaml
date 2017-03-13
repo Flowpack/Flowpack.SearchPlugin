@@ -1,0 +1,2 @@
+FlowPackSearchPlugin_ElasticSearchQueryTemplateCache:
+  frontend: Neos\Cache\Frontend\VariableFrontend
