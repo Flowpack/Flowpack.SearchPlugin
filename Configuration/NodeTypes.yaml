@@ -20,7 +20,7 @@
     'Flowpack.SearchPlugin:SuggestableMixin': true
     'Flowpack.SearchPlugin:AutocompletableMixin': true
   properties:
-    '__completion':
+    '__suggestions':
       search:
         indexing: "${Flowpack.SearchPlugin.Suggestion.buildConfig(q(node).property('text'), {nodeIdentifier: node.identifier}, 10)}"
     '__completion':
