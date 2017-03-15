@@ -91,6 +91,9 @@ class SuggestController extends ActionController
         $termPlaceholder = '---term-soh2gufuNi---';
         $term = strtolower($term);
 
+        // The suggest function only works well with one word
+        $suggestTerm = explode(' ', $term)[0];
+
         if(!$this->elasticSearchQueryTemplateCache->has($contextNodeIdentifier)) {
 
             $contentContext = $this->createContentContext('live', []);
@@ -134,7 +137,7 @@ class SuggestController extends ActionController
             $requestTemplate = $this->elasticSearchQueryTemplateCache->get($contextNodeIdentifier);
         }
 
-        return str_replace($termPlaceholder, $term, $requestTemplate);
+        return str_replace($termPlaceholder, $suggestTerm, $requestTemplate);
     }
 
     /**
