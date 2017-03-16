@@ -10,6 +10,11 @@
     'Flowpack.SearchPlugin:SuggestableMixin': true
     'Flowpack.SearchPlugin:AutocompletableMixin': true
 
+'Neos.Neos:Shortcut':
+  superTypes:
+    'Flowpack.SearchPlugin:SuggestableMixin': false
+    'Flowpack.SearchPlugin:AutocompletableMixin': false
+
 'Neos.NodeTypes:TitleMixin':
   superTypes:
     'Flowpack.SearchPlugin:SuggestableMixin': true
