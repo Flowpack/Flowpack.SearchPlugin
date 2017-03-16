@@ -19,15 +19,3 @@
   superTypes:
     'Flowpack.SearchPlugin:SuggestableMixin': true
     'Flowpack.SearchPlugin:AutocompletableMixin': true
-
-'Neos.NodeTypes:TextMixin':
-  superTypes:
-    'Flowpack.SearchPlugin:SuggestableMixin': true
-    'Flowpack.SearchPlugin:AutocompletableMixin': true
-  properties:
-    '__suggestions':
-      search:
-        indexing: "${Flowpack.SearchPlugin.Suggestion.buildConfig(q(node).property('text'), {nodeIdentifier: node.identifier}, 10)}"
-    '__completion':
-      search:
-        indexing: "${q(node).property('text')}"
