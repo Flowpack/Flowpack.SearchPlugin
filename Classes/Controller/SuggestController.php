@@ -122,6 +122,7 @@ class SuggestController extends ActionController
                     'completion' => [
                         'field' => '__suggestions',
                         'fuzzy' => true,
+                        'size' => 10,
                         'context' => [
                             'parentPath' => $contextNode->getPath(),
                             'workspace' => 'live',
