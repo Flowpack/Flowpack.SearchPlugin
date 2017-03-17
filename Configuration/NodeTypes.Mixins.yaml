@@ -26,4 +26,4 @@
         elasticSearchMapping:
           type: string
           analyzer: autocomplete
-        indexing: "${q(node).property('title')}"
+        indexing: "${String.stripTags(q(node).property('title'))}"
