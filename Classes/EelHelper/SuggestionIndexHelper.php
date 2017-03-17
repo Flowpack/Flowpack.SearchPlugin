@@ -23,16 +23,17 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 {
 
     /**
-     * @param string $input
-     * @param array $payload
-     * @param int $weight
+     * @param string $input The input to store, this can be a an array of strings or just a string. This field is mandatory.
+     * @param string $output The result is de-duplicated if several documents have the same output, i.e. only one is returned as part of the suggest result.
+     * @param array $payload An arbitrary JSON object, which is simply returned in the suggest option.
+     * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
      * @return array
      */
-    public function buildConfig($input, array $payload = [], $weight = 1)
+    public function build($input, $output = '', array $payload = [], $weight = 1)
     {
         return [
             'input' => $this->prepareInput($input),
-            'output' => $this->prepareOutput($input),
+            'output' => $this->prepareOutput($output),
             'payload' => json_encode($payload),
             'weight' => $weight
         ];
