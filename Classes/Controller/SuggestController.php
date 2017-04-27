@@ -12,10 +12,8 @@ namespace Flowpack\SearchPlugin\Controller;
  */
 
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
-use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryResult;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use Neos\Cache\Frontend\VariableFrontend;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
@@ -52,10 +50,11 @@ class SuggestController extends ActionController
 
     /**
      * @param string $contextNodeIdentifier
+     * @param string $dimensionCombination
      * @param string $term
      * @return void
      */
-    public function indexAction($contextNodeIdentifier, $term)
+    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
     {
         $result = [
             'completions' => [],
@@ -68,7 +67,7 @@ class SuggestController extends ActionController
             return;
         }
 
-        $requestJson = $this->buildRequestForTerm($term, $contextNodeIdentifier);
+        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term);
 
         try {
             $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
@@ -84,19 +83,20 @@ class SuggestController extends ActionController
     /**
      * @param string $term
      * @param string $contextNodeIdentifier
+     * @param string $dimensionCombination
      * @return ElasticSearchQueryBuilder
      */
-    protected function buildRequestForTerm($term, $contextNodeIdentifier)
+    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
     {
+        $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
         $term = strtolower($term);
 
         // The suggest function only works well with one word
         $suggestTerm = explode(' ', $term)[0];
 
-        if(!$this->elasticSearchQueryTemplateCache->has($contextNodeIdentifier)) {
-
-            $contentContext = $this->createContentContext('live', []);
+        if(!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
+            $contentContext = $this->createContentContext('live', json_decode($dimensionCombination, true));
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
             /** @var ElasticSearchQueryBuilder $query */
@@ -135,7 +135,7 @@ class SuggestController extends ActionController
 
             $this->elasticSearchQueryTemplateCache->set($contextNodeIdentifier, $requestTemplate);
         } else {
-            $requestTemplate = $this->elasticSearchQueryTemplateCache->get($contextNodeIdentifier);
+            $requestTemplate = $this->elasticSearchQueryTemplateCache->get($cacheKey);
         }
 
         return str_replace($termPlaceholder, $suggestTerm, $requestTemplate);
