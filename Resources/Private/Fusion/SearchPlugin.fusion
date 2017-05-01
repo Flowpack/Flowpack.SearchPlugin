@@ -33,7 +33,7 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
 
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Template) {
     node = ${site}
-    dimensionCombination = ${Json.stringify(this.node.dimensions)}
+    dimensionCombination = ${Json.stringify(this.node.context.dimensions)}
     templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
     inputClassNames = ''
     searchWord = ${request.arguments.search}
