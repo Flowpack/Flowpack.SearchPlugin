@@ -1,8 +1,7 @@
 # Flowpack.SearchPlugin
 
-This plugin is just a very bare-bones basis for a Search Plugin, to be used together with
-[Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor)
-or [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.SimpleSearch.ContentRepositoryAdaptor).
+This plugin is a Search Plugin, to be used together with
+[Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor).
 
 ## Installation
 
