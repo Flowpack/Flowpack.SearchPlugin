@@ -93,7 +93,8 @@ class SuggestController extends ActionController
         $term = strtolower($term);
 
         // The suggest function only works well with one word
-        $suggestTerm = explode(' ', $term)[0];
+        // and the term is trimmed to alnum characters to avoid errors
+        $suggestTerm = preg_replace('/[[:^alnum:]]/', '', explode(' ', $term)[0]);
 
         if(!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
             $contentContext = $this->createContentContext('live', json_decode($dimensionCombination, true));
