@@ -13,6 +13,7 @@ namespace Flowpack\SearchPlugin\Controller;
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
+use TYPO3\Neos\Domain\Service\ContentContextFactory;
 
 /**
  * Class SuggestController
@@ -32,11 +33,19 @@ class SuggestController extends ActionController
         'json' => 'TYPO3\Flow\Mvc\View\JsonView'
     ];
 
+
+    /**
+     * @Flow\Inject
+     * @var ContentContextFactory
+     */
+    protected $contextFactory;
+
     /**
      * @param string $term
+     * @param string $lang
      * @return void
      */
-    public function indexAction($term)
+    public function indexAction($term, $lang)
     {
         $request = [
             'suggests' => [
@@ -47,6 +56,7 @@ class SuggestController extends ActionController
             ]
         ];
 
+        $this->elasticSearchClient->setDimension($lang);
         $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
         $suggestions = array_map(function ($option) {
             return $option['text'];

@@ -33,6 +33,7 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(TYPO3.Neos:Content) {
 
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(TYPO3.TypoScript:Template) {
     node = ${site}
+    lang = ${Array.first(node.context.dimensions.language)}
 
     templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/Search.Form.html'
     searchWord = ${request.arguments.search}

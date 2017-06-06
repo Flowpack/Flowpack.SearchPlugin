@@ -42,7 +42,7 @@ Feel free to use the `DocumentSearchResult.html` in the Flowpack.SearchPlugin as
 ## Search suggestions
 
 The default search form template comes with a `data-autocomplete-source` attribute pointing to the 
-`SuggestController` of this package. Fed with a `term` parameter via a `GET` request, it returns a
+`SuggestController` of this package. Fed with a `term` and `lang` parameter via a `GET` request, it returns a
 JSON-encoded array of suggestions from Elasticsearch. These are fetched with a term suggester from
 the `_all` field, i.e. "the fulltext index".
 
