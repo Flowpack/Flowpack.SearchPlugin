@@ -11,18 +11,35 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
+use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
+use Neos\Neos\Controller\CreateContentContextTrait;
 
 class SuggestController extends ActionController
 {
+    use CreateContentContextTrait;
+
     /**
      * @Flow\Inject
      * @var ElasticSearchClient
      */
     protected $elasticSearchClient;
+
+    /**
+     * @Flow\Inject
+     * @var ElasticSearchQueryBuilder
+     */
+    protected $elasticSearchQueryBuilder;
+
+    /**
+     * @Flow\Inject
+     * @var VariableFrontend
+     */
+    protected $elasticSearchQueryTemplateCache;
 
     /**
      * @var array
@@ -32,26 +49,127 @@ class SuggestController extends ActionController
     ];
 
     /**
+     * @param string $contextNodeIdentifier
+     * @param string $dimensionCombination
      * @param string $term
-     *
      * @return void
      */
-    public function indexAction($term)
+    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
     {
-        $request = [
-            'suggests' => [
-                'text' => $term,
-                'term' => [
-                    'field' => '_all'
-                ]
-            ]
+        $result = [
+            'completions' => [],
+            'suggestions' => []
         ];
 
-        $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
-        $suggestions = array_map(function ($option) {
-            return $option['text'];
-        }, $response['suggests'][0]['options']);
+        if (!is_string($term)) {
+            $result['errors'] = ['term has to be a string'];
+            $this->view->assign('value', $result);
+            return;
+        }
 
-        $this->view->assign('value', $suggestions);
+        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term);
+
+        try {
+            $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
+            $result['completions'] = $this->extractCompletions($response);
+            $result['suggestions'] = $this->extractSuggestions($response);
+        } catch (\Exception $e) {
+            $result['errors'] = ['Could not execute query'];
+        }
+
+        $this->view->assign('value', $result);
+    }
+
+    /**
+     * @param string $term
+     * @param string $contextNodeIdentifier
+     * @param string $dimensionCombination
+     * @return ElasticSearchQueryBuilder
+     */
+    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
+    {
+        $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
+        $termPlaceholder = '---term-soh2gufuNi---';
+        $term = strtolower($term);
+
+        // The suggest function only works well with one word
+        // and the term is trimmed to alnum characters to avoid errors
+        $suggestTerm = preg_replace('/[[:^alnum:]]/', '', explode(' ', $term)[0]);
+
+        if(!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
+            $contentContext = $this->createContentContext('live', json_decode($dimensionCombination, true));
+            $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
+
+            /** @var ElasticSearchQueryBuilder $query */
+            $query = $this->elasticSearchQueryBuilder->query($contextNode);
+            $query
+                ->queryFilter('prefix', [
+                    '__completion' => $termPlaceholder
+                ])
+                ->limit(1)
+                ->aggregation('autocomplete', [
+                    'terms' => [
+                        'field' => '__completion',
+                        'order' => [
+                            '_count' => 'desc'
+                        ],
+                        'include' => [
+                            'pattern' => $termPlaceholder . '.*'
+                        ]
+                    ]
+                ])
+                ->suggestions('suggestions', [
+                    'text' => $termPlaceholder,
+                    'completion' => [
+                        'field' => '__suggestions',
+                        'fuzzy' => true,
+                        'size' => 10,
+                        'context' => [
+                            'parentPath' => $contextNode->getPath(),
+                            'workspace' => 'live',
+                            'dimensionCombinationHash' => md5(json_encode($contextNode->getContext()->getDimensions())),
+                        ]
+                    ]
+                ]);
+
+            $requestTemplate = $query->getRequest()->getRequestAsJson();
+
+            $this->elasticSearchQueryTemplateCache->set($contextNodeIdentifier, $requestTemplate);
+        } else {
+            $requestTemplate = $this->elasticSearchQueryTemplateCache->get($cacheKey);
+        }
+
+        return str_replace($termPlaceholder, $suggestTerm, $requestTemplate);
+    }
+
+    /**
+     * Extract autocomplete options
+     *
+     * @param $response
+     * @return array
+     */
+    protected function extractCompletions($response)
+    {
+        $aggregations = isset($response['aggregations']) ? $response['aggregations'] : [];
+
+        return array_map(function ($option) {
+            return $option['key'];
+        }, $aggregations['autocomplete']['buckets']);
+    }
+
+    /**
+     * Extract suggestion options
+     *
+     * @param $response
+     * @return array
+     */
+    protected function extractSuggestions($response)
+    {
+        $suggestionOptions = isset($response['suggest']) ? $response['suggest'] : [];
+        if (count($suggestionOptions['suggestions'][0]['options']) > 0) {
+            return $suggestionOptions['suggestions'][0]['options'];
+        }
+
+        return [];
     }
 }
