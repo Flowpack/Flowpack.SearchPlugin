@@ -11,6 +11,7 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Mvc\Controller\ActionController;
 
@@ -20,8 +21,8 @@ use TYPO3\Flow\Mvc\Controller\ActionController;
 class SuggestController extends ActionController
 {
     /**
-     * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     * Dynamic dependency; to make the system work with SimpleSearch
+     * @var ElasticSearchClient
      */
     protected $elasticSearchClient;
 
@@ -31,6 +32,20 @@ class SuggestController extends ActionController
     protected $viewFormatToObjectNameMap = [
         'json' => 'TYPO3\Flow\Mvc\View\JsonView'
     ];
+
+    /**
+     * Sets the ElasticSearchClient instance needed for this to work. If no client is set,
+     * this controller cannot be used; but at least the package can otherwise be used with
+     * e.g. SimpleSearch.
+     *
+     * @return void
+     */
+    public function initializeObject()
+    {
+        if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
+            $this->elasticSearchClient = $this->objectManager->get(ElasticSearchClient::class);
+        }
+    }
 
     /**
      * @param string $term
@@ -46,6 +61,10 @@ class SuggestController extends ActionController
                 ]
             ]
         ];
+
+        if ($this->elasticSearchClient === null) {
+            throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
+        }
 
         $response = $this->elasticSearchClient->getIndex()->request('POST', '/_suggest', [], json_encode($request))->getTreatedContent();
         $suggestions = array_map(function ($option) {
