@@ -5,6 +5,10 @@
     "require": {
         "typo3/flow": "~3.0"
     },
+    "suggest": {
+        "flowpack/elasticsearch-contentrepositoryadaptor": "Provides search using Elasticsearch",
+        "flowpack/simplesearch-contentrepositoryadaptor": "A simple php search engine based on sqlite"
+    },
     "autoload": {
         "psr-0": {
             "Flowpack\\SearchPlugin": "Classes"
