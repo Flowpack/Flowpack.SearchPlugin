@@ -10,7 +10,7 @@
   appendExceedingArguments: true
   httpMethods: ['GET']
 -
-  name: 'flowpack/searchplugin - SuggestController->ajax'
+  name: 'flowpack/searchplugin - AjaxSearchController->search'
   uriPattern: 'flowpack/ajaxsearch'
   defaults:
     '@package':    'Flowpack.SearchPlugin'

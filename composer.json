@@ -12,6 +12,10 @@
         "neos/fusion": "^3.0",
         "neos/neos": "^3.0"
     },
+    "suggest": {
+        "flowpack/elasticsearch-contentrepositoryadaptor": "Provides search using Elasticsearch",
+        "flowpack/simplesearch-contentrepositoryadaptor": "A simple php search engine based on sqlite"
+    },
     "autoload": {
         "psr-4": {
             "Flowpack\\SearchPlugin\\": "Classes"
