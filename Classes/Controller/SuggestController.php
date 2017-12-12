@@ -24,13 +24,11 @@ class SuggestController extends ActionController
     use CreateContentContextTrait;
 
     /**
-     * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     * @var ElasticSearchClient
      */
     protected $elasticSearchClient;
 
     /**
-     * @Flow\Inject
      * @var ElasticSearchQueryBuilder
      */
     protected $elasticSearchQueryBuilder;
@@ -52,6 +50,7 @@ class SuggestController extends ActionController
     {
         if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
             $this->elasticSearchClient = $this->objectManager->get(ElasticSearchClient::class);
+            $this->elasticSearchQueryBuilder = $this->objectManager->get(ElasticSearchQueryBuilder::class);
         }
     }
 
