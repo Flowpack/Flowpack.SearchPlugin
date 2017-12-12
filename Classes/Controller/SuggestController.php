@@ -25,7 +25,7 @@ class SuggestController extends ActionController
 
     /**
      * @Flow\Inject
-     * @var ElasticSearchClient
+     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
      */
     protected $elasticSearchClient;
 
@@ -47,6 +47,13 @@ class SuggestController extends ActionController
     protected $viewFormatToObjectNameMap = [
         'json' => JsonView::class
     ];
+
+    public function initializeObject()
+    {
+        if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
+            $this->elasticSearchClient = $this->objectManager->get(ElasticSearchClient::class);
+        }
+    }
 
     /**
      * @param string $contextNodeIdentifier
@@ -165,11 +172,13 @@ class SuggestController extends ActionController
      */
     protected function extractSuggestions($response)
     {
+        if ($this->elasticSearchClient === null) {
+            throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
+        }
         $suggestionOptions = isset($response['suggest']) ? $response['suggest'] : [];
         if (count($suggestionOptions['suggestions'][0]['options']) > 0) {
             return $suggestionOptions['suggestions'][0]['options'];
         }
-
         return [];
     }
 }
