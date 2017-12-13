@@ -4,7 +4,6 @@
     "type": "neos-package",
     "description": "Plugin for search integration via content node",
     "require": {
-        "flowpack/elasticsearch-contentrepositoryadaptor": "^4.0",
         "neos/content-repository": "^3.0",
         "neos/content-repository-search": "^3.0",
         "neos/eel": "^4.0",
