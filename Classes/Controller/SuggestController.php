@@ -13,6 +13,7 @@ namespace Flowpack\SearchPlugin\Controller;
 
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Exception\QueryBuildingException;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
@@ -59,6 +60,7 @@ class SuggestController extends ActionController
      * @param string $dimensionCombination
      * @param string $term
      * @return void
+     * @throws QueryBuildingException
      */
     public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
     {
@@ -95,6 +97,7 @@ class SuggestController extends ActionController
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
      * @return ElasticSearchQueryBuilder
+     * @throws QueryBuildingException
      */
     protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
     {
