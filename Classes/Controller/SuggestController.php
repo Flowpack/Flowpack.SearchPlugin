@@ -12,15 +12,13 @@ namespace Flowpack\SearchPlugin\Controller;
  */
 
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
 
 class SuggestController extends ActionController
 {
     /**
-     * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient
+     * @var ElasticSearchClient
      */
     protected $elasticSearchClient;
 
@@ -49,6 +47,7 @@ class SuggestController extends ActionController
      * @param string $term
      *
      * @return void
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     public function indexAction($term)
     {
