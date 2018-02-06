@@ -1,9 +1,20 @@
 # Flowpack.SearchPlugin
 
 This plugin is a Search Plugin, to be used together with
-[Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor).
+* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor) or 
+* [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.SimpleSearch.ContentRepositoryAdaptor).
 
 ## Installation
+
+Install via composer with your favorite adaptor:
+
+**ElasticSearch**
+
+    composer require flowpack/searchplugin flowpack/elasticsearch-contentrepositoryadaptor
+
+**SimpleSearch**
+
+    composer require flowpack/searchplugin flowpack/simplesearch-contentrepositoryadaptor
 
 Inclusion of the routes from this package into your main `Configuration/Routes.yaml` is no longer needed as of Flow 4.0.
 
