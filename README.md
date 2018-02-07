@@ -59,7 +59,7 @@ In case you need to build the URI to the suggest controller yourself, this is wh
 
 The plugin comes with a controller that can be reached like this per default, using `GET`:
 
-    {f:uri.action(action: 'index', controller: 'AjaxSearch', package: 'Flowpack.SearchPlugin', absolute: 1)}
+    {f:uri.action(action: 'search', controller: 'AjaxSearch', package: 'Flowpack.SearchPlugin', arguments: {node: node, q: ''}, absolute: 1)}
 
 It expects the search term as a parameter named `q` (as defined in `AjaxSearch.fusion`). This controller
 renders the search results and returns them as HTML without any of the page template. It can therefore
