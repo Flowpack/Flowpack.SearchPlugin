@@ -54,7 +54,7 @@ the `_all` field, i.e. "the fulltext index".
 These can be used to provide autocompletion on the search input using a JS library of your choice.
 In case you need to build the URI to the suggest controller yourself, this is what the form uses:
 
-    {f:uri.action(action: 'index', controller: 'Suggest', package: 'Flowpack.SearchPlugin', format: 'json', absolute: 1)}
+    {f:uri.action(action: 'index', controller: 'Suggest', package: 'Flowpack.SearchPlugin', format: 'json', absolute: 1, arguments: {contextNodeIdentifier: node.identifier, dimensionCombination: dimensionCombination})}
 
 The returned JSON looks like this (with a `term` of "content" after indexing the Neos demo site):
 
