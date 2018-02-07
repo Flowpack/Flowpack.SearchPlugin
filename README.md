@@ -20,6 +20,39 @@ Inclusion of the routes from this package into your main `Configuration/Routes.y
 
 ## Configuration
 
+### Custom index name
+
+It is usually a good idea to specify a custom index name for a project, instead of the default `typo3cr`. That
+way no conflicts can arise when multiple projects use the same Elasticsearch server.
+
+To specify a custom index name, the following is needed:
+
+    Neos:
+      ContentRepository:
+        Search:
+          elasticSearch:
+            indexName: acmecom
+    
+    Flowpack:
+      ElasticSearch:
+        indexes:
+          default:      # client name used to connect (see Flowpack.ElasticSearch.clients)
+            acmecom:    # custom index name
+              analysis:
+                filter:
+                  autocompleteFilter:
+                    max_shingle_size: 5
+                    min_shingle_size: 2
+                    type: 'shingle'
+                analyzer:
+                  autocomplete:
+                    filter: [ 'lowercase', 'autocompleteFilter' ]
+                    char_filter: [ 'html_strip' ]
+                    type: 'custom'
+                    tokenizer: 'standard'
+
+The latter is the custom analysis configuration used by the completion / suggestion and must be
+repeated for a custom index name.
 
 ### Pagination 
 
