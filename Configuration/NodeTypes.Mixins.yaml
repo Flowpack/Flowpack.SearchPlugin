@@ -16,7 +16,7 @@
             dimensionCombinationHash:
               type: category
               path: '__dimensionCombinationHash'
-        indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title'), q(node).is('[instanceof Neos.Neos:Document]') ? node.identifier : q(node).parents('[instanceof Neos.Neos:Document]').get(0).identifier, {nodeIdentifier: node.identifier}, 20)}"
+        indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', q(node).is('[instanceof Neos.Neos:Document]') ? node.identifier : q(node).parents('[instanceof Neos.Neos:Document]').get(0).identifier, {nodeIdentifier: node.identifier}, 20)}"
 
 'Flowpack.SearchPlugin:AutocompletableMixin':
   abstract: true
