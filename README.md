@@ -105,3 +105,12 @@ The plugin comes with a controller that can be reached like this per default, us
 It expects the search term as a parameter named `q` (as defined in `AjaxSearch.fusion`). This controller
 renders the search results and returns them as HTML without any of the page template. It can therefore
 be used to request search results via AJAX and display the result by adding it to the DOM as needed.
+
+## Remove special chars from search term
+
+You might not need special chars to prevent search result erros. Some chars are reserved and you can replace them before rendering the search results.
+
+    prototype(Flowpack.SearchPlugin:Search) {
+        searchTerm = ${request.arguments.search}
+        searchTerm.@process.removeSpecialChars = ${String.pregReplace(value, "/[^a-zA-Z0-9äöüÄÖÜß]/", "")}
+    }
