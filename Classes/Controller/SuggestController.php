@@ -58,11 +58,12 @@ class SuggestController extends ActionController
     /**
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
+     * @param string $nodeType
      * @param string $term
      * @return void
      * @throws QueryBuildingException
      */
-    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
+    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term, $nodeType = 'Neos.Neos:Node')
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -79,7 +80,7 @@ class SuggestController extends ActionController
             return;
         }
 
-        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term);
+        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term, $nodeType);
 
         try {
             $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
@@ -96,10 +97,11 @@ class SuggestController extends ActionController
      * @param string $term
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
+     * @param string $nodeType
      * @return ElasticSearchQueryBuilder
      * @throws QueryBuildingException
      */
-    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
+    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term, $nodeType)
     {
         $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
@@ -116,6 +118,7 @@ class SuggestController extends ActionController
             /** @var ElasticSearchQueryBuilder $query */
             $query = $this->elasticSearchQueryBuilder->query($contextNode);
             $query
+                ->nodeType($nodeType)
                 ->queryFilter('prefix', [
                     '__completion' => $termPlaceholder
                 ])
