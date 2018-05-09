@@ -105,3 +105,16 @@ The plugin comes with a controller that can be reached like this per default, us
 It expects the search term as a parameter named `q` (as defined in `AjaxSearch.fusion`). This controller
 renders the search results and returns them as HTML without any of the page template. It can therefore
 be used to request search results via AJAX and display the result by adding it to the DOM as needed.
+
+## Removing special chars from search term
+
+You might need to remove special chars to prevent search errors. Some chars are reserved in Elasticsearch
+and you can replace them before submitting the search like this:
+
+    prototype(Flowpack.SearchPlugin:Search) {
+        searchTerm = ${request.arguments.search}
+        searchTerm.@process.removeSpecialChars = ${String.pregReplace(value, "/[^a-zA-Z0-9äöüÄÖÜß]/", "")}
+    }
+
+Keep in mind, that this blocks the explicit use of wildcards (`*`) and phrase search (`"search exactly this"`)
+for your users, in case you want to support that.
