@@ -21,6 +21,18 @@ Inclusion of the routes from this package into your main `Configuration/Routes.y
 
 ## Configuration
 
+### Custom index name
+
+It is usually a good idea to specify a custom index name for a project, instead of the default `typo3cr`. That
+way no conflicts can arise when multiple projects use the same Elasticsearch server.
+
+To specify a custom index name, the following is needed:
+
+    Neos:
+      ContentRepository:
+        Search:
+          elasticSearch:
+            indexName: acmecom
 
 ### Pagination 
 
@@ -47,9 +59,50 @@ Feel free to use the `DocumentSearchResult.html` in the Flowpack.SearchPlugin as
 ## Search completions and suggestions
 
 The default search form template comes with a `data-autocomplete-source` attribute pointing to the 
-`SuggestController` of this package. Fed with a `term` parameter via a `GET` request, it returns a
-JSON-encoded array of suggestions from Elasticsearch. These are fetched with a term suggester from
-the `_all` field, i.e. "the fulltext index".
+`SuggestController` of this package.
+
+To use this term suggester, you need to configure the indexing like this, to define a custom
+analyzer to be used:
+
+    Flowpack:
+      ElasticSearch:
+        indexes:
+          default:      # client name used to connect (see Flowpack.ElasticSearch.clients)
+            acmecom:    # your (custom) index name
+              analysis:
+                filter:
+                  autocompleteFilter:
+                    max_shingle_size: 5
+                    min_shingle_size: 2
+                    type: 'shingle'
+                analyzer:
+                  autocomplete:
+                    filter: [ 'lowercase', 'autocompleteFilter' ]
+                    char_filter: [ 'html_strip' ]
+                    type: 'custom'
+                    tokenizer: 'standard'
+
+Then you need to configure the node types to be be included in the suggestion building, this can be
+done like this:
+
+    'Neos.Neos:Document':
+      superTypes:
+        'Flowpack.SearchPlugin:SuggestableMixin': true
+        'Flowpack.SearchPlugin:AutocompletableMixin': true
+    
+    'Neos.Neos:Shortcut':
+      superTypes:
+        'Flowpack.SearchPlugin:SuggestableMixin': false
+        'Flowpack.SearchPlugin:AutocompletableMixin': false
+    
+    'Neos.NodeTypes:TitleMixin':
+      superTypes:
+        'Flowpack.SearchPlugin:SuggestableMixin': true
+        'Flowpack.SearchPlugin:AutocompletableMixin': true
+
+When fed with a `term` parameter via a `GET` request, the `SuggestController` will return a
+JSON-encoded array of suggestions from Elasticsearch. They are fetched with a term suggester
+from the `_all` field, i.e. "the fulltext index".
 
 These can be used to provide autocompletion on the search input using a JS library of your choice.
 In case you need to build the URI to the suggest controller yourself, this is what the form uses:
