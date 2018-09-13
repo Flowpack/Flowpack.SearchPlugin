@@ -62,7 +62,7 @@ class SuggestController extends ActionController
      * @return void
      * @throws QueryBuildingException
      */
-    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination)
+    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination = null)
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -109,8 +109,8 @@ class SuggestController extends ActionController
         // and the term is trimmed to alnum characters to avoid errors
         $suggestTerm = preg_replace('/[[:^alnum:]]/', '', explode(' ', $term)[0]);
 
-        if(!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
-            $contentContext = $this->createContentContext('live', json_decode($dimensionCombination, true));
+        if (!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
+            $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
             /** @var ElasticSearchQueryBuilder $query */
