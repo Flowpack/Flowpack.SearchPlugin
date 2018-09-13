@@ -56,13 +56,13 @@ class SuggestController extends ActionController
     }
 
     /**
+     * @param string $term
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
-     * @param string $term
      * @return void
      * @throws QueryBuildingException
      */
-    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
+    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination)
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -79,7 +79,7 @@ class SuggestController extends ActionController
             return;
         }
 
-        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term);
+        $requestJson = $this->buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination);
 
         try {
             $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
@@ -99,7 +99,7 @@ class SuggestController extends ActionController
      * @return ElasticSearchQueryBuilder
      * @throws QueryBuildingException
      */
-    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
+    protected function buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination = null)
     {
         $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
