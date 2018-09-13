@@ -132,7 +132,7 @@ class SuggestController extends ActionController
                     ]
                 ])
                 ->suggestions('suggestions', [
-                    'text' => $termPlaceholder,
+                    'prefix' => $termPlaceholder,
                     'completion' => [
                         'field' => '__suggestions',
                         'fuzzy' => true,

@@ -29,12 +29,10 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
      * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
      * @return array
      */
-    public function build($input, $output = '', array $payload = [], $weight = 1)
+    public function build($input, $weight = 1)
     {
         return [
             'input' => $this->prepareInput($input),
-            'output' => $this->prepareOutput($output),
-            'payload' => json_encode($payload),
             'weight' => $weight
         ];
     }
@@ -64,15 +62,6 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
         } else {
             throw new Exception('Only string or array are supported as input', 1512733287);
         }
-    }
-
-    /**
-     * @param string $input
-     * @return array
-     */
-    protected function prepareOutput($input)
-    {
-        return strip_tags($input);
     }
 
     /**
