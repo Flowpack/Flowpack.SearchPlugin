@@ -86,7 +86,7 @@ class SuggestController extends ActionController
             $result['completions'] = $this->extractCompletions($response);
             $result['suggestions'] = $this->extractSuggestions($response);
         } catch (\Exception $e) {
-            $result['errors'] = ['Could not execute query'];
+            $result['errors'] = ['Could not execute query: ' . $e->getMessage()];
         }
 
         $this->view->assign('value', $result);
