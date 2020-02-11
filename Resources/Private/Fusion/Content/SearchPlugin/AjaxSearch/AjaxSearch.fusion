@@ -1,5 +1,5 @@
 prototype(Flowpack.SearchPlugin:AjaxSearch) < prototype(Neos.Fusion:Template) {
-    templatePath = 'resource://Flowpack.SearchPlugin/Private/Templates/NodeTypes/AjaxSearch.html'
+    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/AjaxSearch/AjaxSearch.html'
 
     searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer {
         @context.searchResults = ${Search.query(site).fulltext(request.arguments.q).execute()}
