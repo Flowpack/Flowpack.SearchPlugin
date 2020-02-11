@@ -1,6 +1,6 @@
 prototype(Flowpack.SearchPlugin:SingleResult) < prototype(Neos.Fusion:Case) {
     default {
-        condition = Flowpack.SearchPlugin:CanRender {
+        condition = Neos.Fusion:CanRender {
             type = ${node.nodeType.name + 'SearchResult'}
         }
         type = ${node.nodeType.name + 'SearchResult'}
