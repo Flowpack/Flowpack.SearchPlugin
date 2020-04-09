@@ -1,0 +1,32 @@
+prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
+    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Search/Search.html'
+
+    searchTerm = ${request.arguments.search}
+    searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm).nodeType('Neos.Neos:Document') : null}
+
+    totalSearchResults = ${this.searchQuery.count()}
+
+    searchForm = Flowpack.SearchPlugin:Search.Form
+
+    configuration = Neos.Fusion:RawArray {
+        itemsPerPage = 25
+        insertAbove = false
+        insertBelow = true
+        maximumNumberOfLinks = 10
+    }
+
+    searchResultRenderer = Neos.Fusion:Tag {
+        tagName = 'ol'
+        content = Flowpack.SearchPlugin:SearchResultRenderer
+    }
+    prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
+
+    @cache {
+        mode = 'uncached'
+        context {
+            1 = 'site'
+            2 = 'node'
+            3 = 'documentNode'
+        }
+    }
+}
