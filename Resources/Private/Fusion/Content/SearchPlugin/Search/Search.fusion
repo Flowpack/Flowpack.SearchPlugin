@@ -1,7 +1,7 @@
 prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
     templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Search/Search.html'
 
-    searchTerm = ${request.arguments.search}
+    searchTerm = ${String.toString(request.arguments.search)}
     searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm).nodeType('Neos.Neos:Document') : null}
 
     totalSearchResults = ${this.searchQuery.count()}
