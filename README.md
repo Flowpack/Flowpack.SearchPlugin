@@ -1,5 +1,7 @@
 # Flowpack.SearchPlugin
 
+[![Latest Stable Version](https://poser.pugx.org/flowpack/searchplugin/v/stable)](https://packagist.org/packages/flowpack/searchplugin) [![Total Downloads](https://poser.pugx.org/flowpack/searchplugin/downloads)](https://packagist.org/packages/flowpack/searchplugin)
+
 This plugin is a Search Plugin, to be used together with
 
 * [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor) or 
