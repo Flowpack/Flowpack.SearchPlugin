@@ -5,18 +5,20 @@
       search:
         elasticSearchMapping:
           type: completion
-          payloads: true
-          context:
-            workspace:
+          contexts:
+            -
+              name: 'workspace'
               type: category
               path: '__workspace'
-            parentPath:
+            -
+              name: 'parentPath'
               type: category
               path: '__parentPath'
-            dimensionCombinationHash:
+            -
+              name: 'dimensionCombinationHash'
               type: category
               path: '__dimensionCombinationHash'
-        indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', q(node).is('[instanceof Neos.Neos:Document]') ? node.identifier : q(node).parents('[instanceof Neos.Neos:Document]').get(0).identifier, {nodeIdentifier: node.identifier}, 20)}"
+        indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"
 
 'Flowpack.SearchPlugin:AutocompletableMixin':
   abstract: true
@@ -24,6 +26,7 @@
     '__completion':
       search:
         elasticSearchMapping:
-          type: string
+          type: text
           analyzer: autocomplete
+          fielddata: true
         indexing: "${String.stripTags(q(node).property('title'))}"

@@ -4,7 +4,7 @@
 
 This plugin is a Search Plugin, to be used together with
 
-* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor) or 
+* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor) or
 * [Flowpack.SimpleSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.SimpleSearch.ContentRepositoryAdaptor).
 
 ## Installation
@@ -36,7 +36,7 @@ To specify a custom index name, the following is needed:
           elasticSearch:
             indexName: acmecom
 
-### Pagination 
+### Pagination
 
 The pagination search results can be configured via Fusion. The following shows the defaults:
 
@@ -60,7 +60,7 @@ Feel free to use the `DocumentSearchResult.html` in the Flowpack.SearchPlugin as
 
 ## Search completions and suggestions
 
-The default search form template comes with a `data-autocomplete-source` attribute pointing to the 
+The default search form template comes with a `data-autocomplete-source` attribute pointing to the
 `SuggestController` of this package.
 
 To use this term suggester, you need to configure the indexing like this, to define a custom
@@ -91,12 +91,12 @@ done like this:
       superTypes:
         'Flowpack.SearchPlugin:SuggestableMixin': true
         'Flowpack.SearchPlugin:AutocompletableMixin': true
-    
+
     'Neos.Neos:Shortcut':
       superTypes:
         'Flowpack.SearchPlugin:SuggestableMixin': false
         'Flowpack.SearchPlugin:AutocompletableMixin': false
-    
+
     'Neos.NodeTypes:TitleMixin':
       superTypes:
         'Flowpack.SearchPlugin:SuggestableMixin': true
@@ -126,23 +126,65 @@ The returned JSON looks like this (with a `term` of "content" after indexing the
       "suggestions": [
         {
           "text": "995c9174-ddd6-4d5c-cfc0-1ffc82184677",
-          "score": 20,
+          "_index": "acmecom-1536833562",
+          "_type": "Neos-Neos:Page",
+          "_id": "03da089f6495852dc9e7b796adde85f21093b3c7",
+          "score": 40,
           "payload": {
-            "nodeIdentifier": "d17caff2-f50c-d30b-b735-9b9216de02e9"
+            "__path": "/sites/acmecom/node-2"
+          },
+          "contexts": {
+            "workspace": {
+              0: "live"
+            },
+            "parentPath": {
+              0: "/sites/acmecom"
+            },
+            "dimensionCombinationHash": {
+              0: "d751713988987e9331980363e24189ce"
+            },
           }
         },
         {
           "text": "a66ec7db-3459-b67b-7bcb-16e2508a89f0",
+          "_index": "acmecom-1536833562",
+          "_type": "Neos-Neos:Page",
+          "_id": "151a1d0531f1ac5c1a267a3d6a3af84967e0c35f",
           "score": 20,
           "payload": {
-            "nodeIdentifier": "fd283257-9b12-8412-f922-6643ac818294"
+            "__path": "/sites/acmecom/node-1"
+          },
+          "contexts": {
+            "workspace": {
+              0: "live"
+            },
+            "parentPath": {
+              0: "/sites/acmecom"
+            },
+            "dimensionCombinationHash": {
+              0: "d751713988987e9331980363e24189ce"
+            },
           }
         },
         {
           "text": "a3474e1d-dd60-4a84-82b1-18d2f21891a3",
+          "_index": "acmecom-1536833562",
+          "_id": "c443d53c76de1af2438b8af0bf33dc7befe291f5",
+          "_type": "Neos-Neos:Page",
           "score": 20,
-          "payload": {
-            "nodeIdentifier": "7eee2ee6-2a4e-5240-3674-2fb84a51900b"
+          "_source": {
+            "__path": "/sites/acmecom/node-3"
+          },
+          "contexts": {
+            "workspace": {
+              0: "live"
+            },
+            "parentPath": {
+              0: "/sites/acmecom"
+            },
+            "dimensionCombinationHash": {
+              0: "d751713988987e9331980363e24189ce"
+            },
           }
         }
       ]

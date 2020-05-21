@@ -56,13 +56,13 @@ class SuggestController extends ActionController
     }
 
     /**
+     * @param string $term
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
-     * @param string $term
      * @return void
      * @throws QueryBuildingException
      */
-    public function indexAction($contextNodeIdentifier, $dimensionCombination, $term)
+    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination = null)
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -79,14 +79,14 @@ class SuggestController extends ActionController
             return;
         }
 
-        $requestJson = $this->buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term);
+        $requestJson = $this->buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination);
 
         try {
             $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
             $result['completions'] = $this->extractCompletions($response);
             $result['suggestions'] = $this->extractSuggestions($response);
         } catch (\Exception $e) {
-            $result['errors'] = ['Could not execute query'];
+            $result['errors'] = ['Could not execute query: ' . $e->getMessage()];
         }
 
         $this->view->assign('value', $result);
@@ -99,7 +99,7 @@ class SuggestController extends ActionController
      * @return ElasticSearchQueryBuilder
      * @throws QueryBuildingException
      */
-    protected function buildRequestForTerm($contextNodeIdentifier, $dimensionCombination, $term)
+    protected function buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination = null)
     {
         $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
@@ -109,8 +109,8 @@ class SuggestController extends ActionController
         // and the term is trimmed to alnum characters to avoid errors
         $suggestTerm = preg_replace('/[[:^alnum:]]/', '', explode(' ', $term)[0]);
 
-        if(!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
-            $contentContext = $this->createContentContext('live', json_decode($dimensionCombination, true));
+        if (!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
+            $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
             /** @var ElasticSearchQueryBuilder $query */
@@ -132,7 +132,7 @@ class SuggestController extends ActionController
                     ]
                 ])
                 ->suggestions('suggestions', [
-                    'text' => $termPlaceholder,
+                    'prefix' => $termPlaceholder,
                     'completion' => [
                         'field' => '__suggestions',
                         'fuzzy' => true,
