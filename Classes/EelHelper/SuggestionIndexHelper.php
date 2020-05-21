@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\SearchPlugin\EelHelper;
 
 /*
@@ -24,10 +26,9 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 {
     /**
      * @param string|array $input The input to store, this can be a an array of strings or just a string. This field is mandatory.
-     * @param string $output The result is de-duplicated if several documents have the same output, i.e. only one is returned as part of the suggest result.
-     * @param array $payload An arbitrary JSON object, which is simply returned in the suggest option.
      * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
      * @return array
+     * @throws Exception
      */
     public function build($input, $weight = 1)
     {
@@ -44,7 +45,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
      */
     protected function prepareInput($input)
     {
-        $process = function ($input) {
+        $process = static function ($input) {
             if (!\is_string($input)) {
                 throw new Exception('Only string are supported as input', 1512733297);
             }
