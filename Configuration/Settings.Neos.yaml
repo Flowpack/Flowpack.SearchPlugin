@@ -1,0 +1,17 @@
+Neos:
+  Flow:
+    mvc:
+      routes:
+        'Flowpack.SearchPlugin':
+          position: 'before Neos.Neos'
+  Fusion:
+    defaultContext:
+      Flowpack.SearchPlugin.Array: Flowpack\SearchPlugin\EelHelper\SearchArrayHelper
+  Neos:
+    fusion:
+      autoInclude:
+        Flowpack.SearchPlugin: true
+  ContentRepository:
+    Search:
+      defaultContext:
+        Flowpack.SearchPlugin.Suggestion: Flowpack\SearchPlugin\EelHelper\SuggestionIndexHelper

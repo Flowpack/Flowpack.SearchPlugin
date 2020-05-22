@@ -19,14 +19,3 @@
               type: category
               path: '__dimensionCombinationHash'
         indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"
-
-'Flowpack.SearchPlugin:AutocompletableMixin':
-  abstract: true
-  properties:
-    '__completion':
-      search:
-        elasticSearchMapping:
-          type: text
-          analyzer: autocomplete
-          fielddata: true
-        indexing: "${String.stripTags(q(node).property('title'))}"

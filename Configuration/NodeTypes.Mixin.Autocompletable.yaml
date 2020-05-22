@@ -1,0 +1,10 @@
+'Flowpack.SearchPlugin:AutocompletableMixin':
+  abstract: true
+  properties:
+    '__completion':
+      search:
+        elasticSearchMapping:
+          type: text
+          analyzer: autocomplete
+          fielddata: true
+        indexing: "${String.stripTags(q(node).property('title'))}"

@@ -47,6 +47,12 @@ class SuggestController extends ActionController
         'json' => JsonView::class
     ];
 
+    /**
+     * @Flow\InjectConfiguration("searchAsYouType")
+     * @var array
+     */
+    protected $searchAsYouTypeSettings = [];
+
     public function initializeObject()
     {
         if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
@@ -96,10 +102,11 @@ class SuggestController extends ActionController
      * @param string $term
      * @param string $contextNodeIdentifier
      * @param string $dimensionCombination
-     * @return ElasticSearchQueryBuilder
+     * @return string
      * @throws QueryBuildingException
+     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      */
-    protected function buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination = null)
+    protected function buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination = null): string
     {
         $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
@@ -113,22 +120,23 @@ class SuggestController extends ActionController
             $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
+            $sourceFields = $this->searchAsYouTypeSettings['suggestions']['sourceFields'] ?? ['__path'];
+
             /** @var ElasticSearchQueryBuilder $query */
-            $query = $this->elasticSearchQueryBuilder->query($contextNode);
-            $query
+            $query = $this->elasticSearchQueryBuilder
+                ->query($contextNode)
                 ->queryFilter('prefix', [
                     '__completion' => $termPlaceholder
                 ])
-                ->limit(1)
+                ->limit(0)
                 ->aggregation('autocomplete', [
                     'terms' => [
                         'field' => '__completion',
                         'order' => [
                             '_count' => 'desc'
                         ],
-                        'include' => [
-                            'pattern' => $termPlaceholder . '.*'
-                        ]
+                        'include' => $termPlaceholder . '.*',
+                        'size' => $this->searchAsYouTypeSettings['autocomplete']['size'] ?? 10
                     ]
                 ])
                 ->suggestions('suggestions', [
@@ -136,8 +144,8 @@ class SuggestController extends ActionController
                     'completion' => [
                         'field' => '__suggestions',
                         'fuzzy' => true,
-                        'size' => 10,
-                        'context' => [
+                        'size' => $this->searchAsYouTypeSettings['suggestions']['size'] ?? 10,
+                        'contexts' => [
                             'parentPath' => $contextNode->getPath(),
                             'workspace' => 'live',
                             'dimensionCombinationHash' => md5(json_encode($contextNode->getContext()->getDimensions())),
@@ -145,7 +153,11 @@ class SuggestController extends ActionController
                     ]
                 ]);
 
-            $requestTemplate = $query->getRequest()->getRequestAsJson();
+            $request = $query->getRequest()->toArray();
+
+            $request['_source'] = $sourceFields;
+
+            $requestTemplate = json_encode($request);
 
             $this->elasticSearchQueryTemplateCache->set($contextNodeIdentifier, $requestTemplate);
         } else {
@@ -163,9 +175,9 @@ class SuggestController extends ActionController
      */
     protected function extractCompletions($response)
     {
-        $aggregations = isset($response['aggregations']) ? $response['aggregations'] : [];
+        $aggregations = $response['aggregations'] ?? [];
 
-        return array_map(function ($option) {
+        return array_map(static function ($option) {
             return $option['key'];
         }, $aggregations['autocomplete']['buckets']);
     }
@@ -173,16 +185,19 @@ class SuggestController extends ActionController
     /**
      * Extract suggestion options
      *
-     * @param $response
+     * @param array $response
      * @return array
      */
-    protected function extractSuggestions($response)
+    protected function extractSuggestions(array $response): array
     {
-        $suggestionOptions = isset($response['suggest']) ? $response['suggest'] : [];
+        $suggestionOptions = $response['suggest']['suggestions'][0]['options'] ?? [];
 
-        if (count($suggestionOptions['suggestions'][0]['options']) > 0) {
-            return $suggestionOptions['suggestions'][0]['options'];
+        if (empty($suggestionOptions)) {
+            return [];
         }
-        return [];
+
+        return array_map(static function ($option) {
+            return $option['_source'];
+        }, $suggestionOptions);
     }
 }
