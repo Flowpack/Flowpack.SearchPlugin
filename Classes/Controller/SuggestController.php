@@ -120,7 +120,7 @@ class SuggestController extends ActionController
             $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
-            $sourceFields = $this->searchAsYouTypeSettings['suggestions']['sourceFields'] ?? ['__path'];
+            $sourceFields = $this->searchAsYouTypeSettings['suggestions']['sourceFields'] ?? ['neos_path'];
 
             /** @var ElasticSearchQueryBuilder $query */
             $query = $this->elasticSearchQueryBuilder
