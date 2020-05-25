@@ -6,5 +6,5 @@ Flowpack:
       suggestions:
         size: 10
         sourceFields:
-          - __path
+          - neos_path
           - title

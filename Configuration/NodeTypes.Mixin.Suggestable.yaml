@@ -9,11 +9,11 @@
             -
               name: 'workspace'
               type: category
-              path: '__workspace'
+              path: 'neos_workspace'
             -
               name: 'parentPath'
               type: category
-              path: '__parentPath'
+              path: 'neos_parent_path '
             -
               name: 'dimensionCombinationHash'
               type: category
