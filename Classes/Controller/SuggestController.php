@@ -67,8 +67,9 @@ class SuggestController extends ActionController
      * @param string $dimensionCombination
      * @return void
      * @throws QueryBuildingException
+     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      */
-    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination = null)
+    public function indexAction(string $term, string $contextNodeIdentifier, string $dimensionCombination = null): void
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -106,7 +107,7 @@ class SuggestController extends ActionController
      * @throws QueryBuildingException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      */
-    protected function buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination = null): string
+    protected function buildRequestForTerm(string $term, string $contextNodeIdentifier, string $dimensionCombination = null): string
     {
         $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
         $termPlaceholder = '---term-soh2gufuNi---';
@@ -170,10 +171,10 @@ class SuggestController extends ActionController
     /**
      * Extract autocomplete options
      *
-     * @param $response
+     * @param array $response
      * @return array
      */
-    protected function extractCompletions($response)
+    protected function extractCompletions(array $response): array
     {
         $aggregations = $response['aggregations'] ?? [];
 
