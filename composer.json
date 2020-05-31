@@ -11,6 +11,9 @@
         "neos/fusion": "^4.0 || ^5.0",
         "neos/neos": "^4.0 || ^5.0"
     },
+    "conflict": {
+        "flowpack/elasticsearch-contentrepositoryadaptor": "<7.0.0"
+    },
     "suggest": {
         "flowpack/elasticsearch-contentrepositoryadaptor": "Provides search using Elasticsearch",
         "flowpack/simplesearch-contentrepositoryadaptor": "A simple php search engine based on sqlite"
