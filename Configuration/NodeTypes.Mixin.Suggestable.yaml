@@ -1,7 +1,7 @@
 'Flowpack.SearchPlugin:SuggestableMixin':
   abstract: true
   properties:
-    '__suggestions':
+    'neos_suggestion':
       search:
         elasticSearchMapping:
           type: completion
@@ -11,11 +11,7 @@
               type: category
               path: 'neos_workspace'
             -
-              name: 'parentPath'
+              name: 'parent_path'
               type: category
               path: 'neos_parent_path '
-            -
-              name: 'dimensionCombinationHash'
-              type: category
-              path: '__dimensionCombinationHash'
         indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"

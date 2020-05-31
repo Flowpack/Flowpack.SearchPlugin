@@ -127,12 +127,12 @@ class SuggestController extends ActionController
             $query = $this->elasticSearchQueryBuilder
                 ->query($contextNode)
                 ->queryFilter('prefix', [
-                    '__completion' => $termPlaceholder
+                    'neos_completion' => $termPlaceholder
                 ])
                 ->limit(0)
                 ->aggregation('autocomplete', [
                     'terms' => [
-                        'field' => '__completion',
+                        'field' => 'neos_completion',
                         'order' => [
                             '_count' => 'desc'
                         ],
@@ -143,13 +143,12 @@ class SuggestController extends ActionController
                 ->suggestions('suggestions', [
                     'prefix' => $termPlaceholder,
                     'completion' => [
-                        'field' => '__suggestions',
+                        'field' => 'neos_suggestion',
                         'fuzzy' => true,
                         'size' => $this->searchAsYouTypeSettings['suggestions']['size'] ?? 10,
                         'contexts' => [
-                            'parentPath' => $contextNode->getPath(),
+                            'parent_path' => $contextNode->getPath(),
                             'workspace' => 'live',
-                            'dimensionCombinationHash' => md5(json_encode($contextNode->getContext()->getDimensions())),
                         ]
                     ]
                 ]);

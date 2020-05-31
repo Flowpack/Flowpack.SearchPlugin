@@ -1,7 +1,7 @@
 'Flowpack.SearchPlugin:AutocompletableMixin':
   abstract: true
   properties:
-    '__completion':
+    'neos_completion':
       search:
         elasticSearchMapping:
           type: text
