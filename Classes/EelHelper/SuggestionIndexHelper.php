@@ -43,12 +43,9 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
      * @return array
      * @throws Exception
      */
-    protected function prepareInput($input)
+    protected function prepareInput($input): ?array
     {
-        $process = static function ($input) {
-            if (!\is_string($input)) {
-                throw new Exception('Only string are supported as input', 1512733297);
-            }
+        $process = static function (string $input) {
             $input = preg_replace("/\r|\n/", '', $input);
             return array_values(array_filter(explode(' ', preg_replace("/[^[:alnum:][:space:]]/u", ' ', strip_tags($input)))));
         };
