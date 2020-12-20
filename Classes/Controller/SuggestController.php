@@ -62,7 +62,7 @@ class SuggestController extends ActionController
      * @return void
      * @throws QueryBuildingException
      */
-    public function indexAction($term, $contextNodeIdentifier, $dimensionCombination = null)
+    public function indexAction($term = '', $contextNodeIdentifier, $dimensionCombination = null)
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
