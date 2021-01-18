@@ -3,8 +3,10 @@ Flowpack:
     searchAsYouType:
       autocomplete:
         size: 10
+        enabled: true
       suggestions:
         size: 10
+        enabled: true
         sourceFields:
           - neos_path
           - title
