@@ -129,8 +129,10 @@ class SuggestController extends ActionController
                 ->queryFilter('prefix', [
                     'neos_completion' => $termPlaceholder
                 ])
-                ->limit(0)
-                ->aggregation('autocomplete', [
+                ->limit(0);
+
+            if (($this->searchAsYouTypeSettings['autocomplete']['enabled'] ?? false) === true) {
+                $query->aggregation('autocomplete', [
                     'terms' => [
                         'field' => 'neos_completion',
                         'order' => [
@@ -139,8 +141,11 @@ class SuggestController extends ActionController
                         'include' => $termPlaceholder . '.*',
                         'size' => $this->searchAsYouTypeSettings['autocomplete']['size'] ?? 10
                     ]
-                ])
-                ->suggestions('suggestions', [
+                ]);
+            }
+
+            if (($this->searchAsYouTypeSettings['suggestions']['enabled'] ?? false) === true) {
+                $query->suggestions('suggestions', [
                     'prefix' => $termPlaceholder,
                     'completion' => [
                         'field' => 'neos_suggestion',
@@ -152,6 +157,7 @@ class SuggestController extends ActionController
                         ]
                     ]
                 ]);
+            }
 
             $request = $query->getRequest()->toArray();
 
