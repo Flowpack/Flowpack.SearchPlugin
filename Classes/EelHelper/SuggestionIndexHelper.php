@@ -45,7 +45,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
      */
     protected function prepareInput($input): ?array
     {
-        $process = static function (string $input) {
+        $process = static function (?string $input) {
             $input = preg_replace("/\r|\n/", '', $input);
             return array_values(array_filter(explode(' ', preg_replace("/[^[:alnum:][:space:]]/u", ' ', strip_tags($input)))));
         };
