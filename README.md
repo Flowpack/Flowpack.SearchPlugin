@@ -71,18 +71,19 @@ analyzer to be used:
         indexes:
           default:      # client name used to connect (see Flowpack.ElasticSearch.clients)
             acmecom:    # your (custom) index name
-              analysis:
-                filter:
-                  autocompleteFilter:
-                    max_shingle_size: 5
-                    min_shingle_size: 2
-                    type: 'shingle'
-                analyzer:
-                  autocomplete:
-                    filter: [ 'lowercase', 'autocompleteFilter' ]
-                    char_filter: [ 'html_strip' ]
-                    type: 'custom'
-                    tokenizer: 'standard'
+              settings:
+                analysis:
+                  filter:
+                    autocompleteFilter:
+                      max_shingle_size: 5
+                      min_shingle_size: 2
+                      type: 'shingle'
+                  analyzer:
+                    autocomplete:
+                      filter: [ 'lowercase', 'autocompleteFilter' ]
+                      char_filter: [ 'html_strip' ]
+                      type: 'custom'
+                      tokenizer: 'standard'
 
 Then you need to configure the node types to be be included in the suggestion building, this can be
 done like this:
