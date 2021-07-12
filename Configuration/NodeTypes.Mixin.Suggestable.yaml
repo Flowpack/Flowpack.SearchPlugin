@@ -1,21 +1,20 @@
 'Flowpack.SearchPlugin:SuggestableMixin':
   abstract: true
   properties:
+    'neos_suggestion_context':
+      search:
+        elasticSearchMapping:
+          type: keyword
+        indexing: "${Flowpack.SearchPlugin.Suggestion.buildContext(node)}"
+
     'neos_suggestion':
       search:
         elasticSearchMapping:
           type: completion
           contexts:
             -
-              name: 'workspace'
+              name: 'suggestion_context'
               type: category
-              path: 'neos_workspace'
-            -
-              name: 'parent_path'
-              type: category
-              path: 'neos_parent_path'
-            -
-              name: 'hidden'
-              type: category
-              path: 'neos_hidden'
+              path: 'neos_suggestion_context'
+
         indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"
