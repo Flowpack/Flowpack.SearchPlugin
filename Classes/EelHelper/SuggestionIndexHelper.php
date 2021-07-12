@@ -48,7 +48,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
     {
         $process = static function (?string $input) {
             $input = preg_replace("/\r|\n/", '', $input);
-            return array_values(array_filter(explode(' ', SearchTerm::sanitizeSearchInput(strip_tags($input)))));
+            return array_values(array_filter(explode(' ', SearchTerm::sanitize(strip_tags($input)))));
         };
 
         if (\is_string($input)) {

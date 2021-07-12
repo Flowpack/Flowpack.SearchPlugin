@@ -13,5 +13,9 @@
             -
               name: 'parent_path'
               type: category
-              path: 'neos_parent_path '
+              path: 'neos_parent_path'
+            -
+              name: 'hidden'
+              type: category
+              path: 'neos_hidden'
         indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"
