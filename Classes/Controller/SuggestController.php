@@ -155,6 +155,7 @@ class SuggestController extends ActionController
                         'contexts' => [
                             'parent_path' => $contextNode->getPath(),
                             'workspace' => 'live',
+                            'hidden' => false,
                         ]
                     ]
                 ]);
