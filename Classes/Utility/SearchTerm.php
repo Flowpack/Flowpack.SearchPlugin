@@ -15,6 +15,14 @@ namespace Flowpack\SearchPlugin\Utility;
 
 class SearchTerm
 {
+    /**
+     * According to https://lucene.apache.org/core/3_4_0/queryparsersyntax.html#Escaping%20Special%20Characters,
+     * special characters should be escapable using a „\“ character. Sadly because of some internal json encoding this doesn't work properly.
+     * Any of these characters break the query and are removed.
+     *
+     * @param string $input
+     * @return string
+     */
     public static function sanitize(string $input): string
     {
         return str_replace(['\\', '=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/'], '', $input);
