@@ -128,7 +128,7 @@ It is recommended to remove characters, which are reserved in Elasticsearch from
 an eel helper to replace them before submitting the search like this:
 
     prototype(Flowpack.SearchPlugin:Search) {
-        searchTerm = Flowpack.SearchPlugin.SearchTerm.sanitize(${request.arguments.search})
+        searchTerm = ${Flowpack.SearchPlugin.SearchTerm.sanitize(request.arguments.search)}
     }
 
 Keep in mind, that this blocks the explicit use of wildcards (`*`) and phrase search (`"search exactly this"`)
