@@ -14,7 +14,7 @@ namespace Flowpack\SearchPlugin\EelHelper;
  */
 
 use Flowpack\SearchPlugin\Exception;
-use Flowpack\SearchPlugin\Utility\Sanitation;
+use Flowpack\SearchPlugin\Utility\SearchTerm;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 
@@ -48,7 +48,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
     {
         $process = static function (?string $input) {
             $input = preg_replace("/\r|\n/", '', $input);
-            return array_values(array_filter(explode(' ', Sanitation::sanitizeSearchInput(strip_tags($input)))));
+            return array_values(array_filter(explode(' ', SearchTerm::sanitizeSearchInput(strip_tags($input)))));
         };
 
         if (\is_string($input)) {
