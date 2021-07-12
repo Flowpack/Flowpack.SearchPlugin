@@ -15,10 +15,8 @@ namespace Flowpack\SearchPlugin\Utility;
 
 class SearchTerm
 {
-
-    public static function sanitizeSearchInput(string $input): string
+    public static function sanitize(string $input): string
     {
         return str_replace(['=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/'], ['', '', '', '(', '\)', '\{', '\}', '\[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\', '\/'], $input);
     }
-
 }

@@ -7,6 +7,7 @@ Neos:
   Fusion:
     defaultContext:
       Flowpack.SearchPlugin.Array: Flowpack\SearchPlugin\EelHelper\SearchArrayHelper
+      Flowpack.SearchPlugin.SearchTerm: Flowpack\SearchPlugin\EelHelper\SearchTermHelper
   Neos:
     fusion:
       autoInclude:

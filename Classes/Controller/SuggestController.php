@@ -116,7 +116,7 @@ class SuggestController extends ActionController
 
         // The suggest function only works well with one word
         // special search characters are escaped
-        $suggestTerm = SearchTerm::sanitizeSearchInput(explode(' ', $term)[0]);
+        $suggestTerm = SearchTerm::sanitize(explode(' ', $term)[0]);
 
         if (!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
             $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);

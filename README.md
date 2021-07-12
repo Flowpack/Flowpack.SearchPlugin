@@ -124,12 +124,11 @@ be used to request search results via AJAX and display the result by adding it t
 
 ## Removing special chars from search term
 
-You might need to remove special chars to prevent search errors. Some chars are reserved in Elasticsearch
-and you can replace them before submitting the search like this:
+It is recommended to remove characters, which are reserved in Elasticsearch from the search term to prevent errors. There is 
+an eel helper to replace them before submitting the search like this:
 
     prototype(Flowpack.SearchPlugin:Search) {
-        searchTerm = ${request.arguments.search}
-        searchTerm.@process.removeSpecialChars = ${String.pregReplace(value, "/[^a-zA-Z0-9äöüÄÖÜß]/", "")}
+        searchTerm = Flowpack.SearchPlugin.SearchTerm.sanitize(${request.arguments.search})
     }
 
 Keep in mind, that this blocks the explicit use of wildcards (`*`) and phrase search (`"search exactly this"`)
