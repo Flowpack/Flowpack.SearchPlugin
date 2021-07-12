@@ -18,7 +18,7 @@ class SearchTerm
 
     public static function sanitizeSearchInput(string $input): string
     {
-        return str_replace(['=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/'], ['', '', '', '(', '\)', '\{', '\}', '\[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\', '\/'], $input);
+        return str_replace(['\\', '=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '/'], '', $input);
     }
 
 }
