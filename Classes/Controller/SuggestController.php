@@ -14,7 +14,7 @@ namespace Flowpack\SearchPlugin\Controller;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Exception\QueryBuildingException;
-use Flowpack\SearchPlugin\Utility\Sanitation;
+use Flowpack\SearchPlugin\Utility\SearchTerm;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
@@ -116,7 +116,7 @@ class SuggestController extends ActionController
 
         // The suggest function only works well with one word
         // special search characters are escaped
-        $suggestTerm = Sanitation::sanitizeSearchInput(explode(' ', $term)[0]);
+        $suggestTerm = SearchTerm::sanitizeSearchInput(explode(' ', $term)[0]);
 
         if (!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
             $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);

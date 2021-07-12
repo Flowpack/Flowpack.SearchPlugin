@@ -13,12 +13,12 @@ namespace Flowpack\SearchPlugin\Utility;
  * source code.
  */
 
-class Sanitation
+class SearchTerm
 {
 
     public static function sanitizeSearchInput(string $input): string
     {
-        return str_replace(['=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/'], ['', '', '', '(', '\)', '\{', '\}', '[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\', '\/'], $input);
+        return str_replace(['=', '>', '<', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/'], ['', '', '', '(', '\)', '\{', '\}', '\[', '\]', '\^', '\"', '\~', '\*', '\?', '\:', '\\\\', '\/'], $input);
     }
 
 }
