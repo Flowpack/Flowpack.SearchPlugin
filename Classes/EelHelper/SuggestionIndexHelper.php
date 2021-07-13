@@ -15,6 +15,7 @@ namespace Flowpack\SearchPlugin\EelHelper;
 
 use Flowpack\SearchPlugin\Exception;
 use Flowpack\SearchPlugin\Utility\SearchTerm;
+use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 
@@ -25,18 +26,36 @@ use Neos\Flow\Annotations as Flow;
  */
 class SuggestionIndexHelper implements ProtectedContextAwareInterface
 {
+
+    /**
+     * Rhe length of '/sites/'
+     * @var int
+     */
+    protected const SITES_OFFSET = 7;
+
     /**
      * @param string|array $input The input to store, this can be a an array of strings or just a string. This field is mandatory.
      * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
      * @return array
      * @throws Exception
      */
-    public function build($input, $weight = 1)
+    public function build($input, $weight = 1): array
     {
         return [
             'input' => $this->prepareInput($input),
             'weight' => $weight
         ];
+    }
+
+    public function buildContext(NodeInterface $node): string
+    {
+        $siteName = substr($node->getPath(), self::SITES_OFFSET, strpos($node->getPath() . '/', '/', self::SITES_OFFSET) - self::SITES_OFFSET);
+        return sprintf(
+            '%s-%s-%s',
+            $siteName,
+            $node->getWorkspace()->getName(),
+            $node->isHidden() ? 'hidden' : 'visible'
+        );
     }
 
     /**

@@ -14,6 +14,7 @@ namespace Flowpack\SearchPlugin\Controller;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Exception\QueryBuildingException;
+use Flowpack\SearchPlugin\EelHelper\SuggestionIndexHelper;
 use Flowpack\SearchPlugin\Utility\SearchTerm;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Flow\Annotations as Flow;
@@ -40,6 +41,12 @@ class SuggestController extends ActionController
      * @var VariableFrontend
      */
     protected $elasticSearchQueryTemplateCache;
+
+    /**
+     * @Flow\Inject
+     * @var SuggestionIndexHelper
+     */
+    protected $suggestionIndexHelper;
 
     /**
      * @var array
@@ -153,8 +160,7 @@ class SuggestController extends ActionController
                         'fuzzy' => true,
                         'size' => $this->searchAsYouTypeSettings['suggestions']['size'] ?? 10,
                         'contexts' => [
-                            'parent_path' => $contextNode->getPath(),
-                            'workspace' => 'live',
+                            'suggestion_context' => $this->suggestionIndexHelper->buildContext($contextNode)
                         ]
                     ]
                 ]);
