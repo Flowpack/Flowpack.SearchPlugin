@@ -40,7 +40,7 @@ class SuggestionContext implements SuggestionContextInterface
         return $this;
     }
 
-    public function buildForSearch(NodeInterface $node): SuggestionContextInterface
+    public function buildForSearch(NodeInterface $node): self
     {
         $this->contextValues = [
             'siteName' => $this->getSiteName($node),
