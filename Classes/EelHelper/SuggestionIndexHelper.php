@@ -71,15 +71,17 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 
         if (\is_string($input)) {
             return $process($input);
-        } elseif (\is_array($input)) {
+        }
+
+        if (\is_array($input)) {
             $data = [];
             foreach (array_map($process, $input) as $values) {
                 $data = \array_merge($data, $values);
             }
             return $data;
-        } else {
-            throw new Exception('Only string or array are supported as input', 1512733287);
         }
+
+        throw new Exception('Only string or array are supported as input', 1512733287);
     }
 
     /**
