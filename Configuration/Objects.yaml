@@ -7,3 +7,9 @@ Flowpack\SearchPlugin\Controller\SuggestController:
         arguments:
           1:
             value: FlowPackSearchPlugin_ElasticSearchQueryTemplateCache
+
+Neos\ContentRepository\Search\AssetExtraction\AssetExtractorInterface:
+  className: 'Flowpack\ElasticSearch\ContentRepositoryAdaptor\AssetExtraction\IngestAttachmentAssetExtractor'
+
+Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface:
+  className: 'Flowpack\SearchPlugin\Suggestion\SuggestionContext'

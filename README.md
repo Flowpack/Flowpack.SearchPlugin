@@ -112,6 +112,11 @@ In case you need to build the URI to the suggest controller yourself, this is wh
 
     {f:uri.action(action: 'index', controller: 'Suggest', package: 'Flowpack.SearchPlugin', format: 'json', absolute: 1, arguments: {contextNodeIdentifier: node.identifier, dimensionCombination: dimensionCombination})}
 
+### Adjust the suggestion context
+
+The suggestionContext determines, if a result should be displayed in suggetions. By default, nodes that are hidden are excluded.
+In many projects, the search als takes the Neos.Seo metaRobotsNoindex property into account or excludes certain nodeTypes. In order to adjust the suggestion context to your search logic, you can write your custom logic and switch the implementation of the `Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface` via Objects.yaml
+
 ## AJAX search
 
 The plugin comes with a controller that can be reached like this per default, using `GET`:
