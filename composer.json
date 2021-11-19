@@ -5,7 +5,7 @@
     "description": "Plugin for search integration via content node",
     "require": {
         "neos/content-repository": "^4.0 || ^5.0",
-        "neos/content-repository-search": "^3.0 || dev-master",
+        "neos/content-repository-search": "^3.0 || ^4.0 || dev-master",
         "neos/eel": "^5.0 || ^6.0",
         "neos/flow": "^5.0 || ^6.0",
         "neos/fusion": "^4.0 || ^5.0",
