@@ -29,7 +29,7 @@ class SuggestionContext implements SuggestionContextInterface
      */
     protected $contextValues = [];
 
-    public function buildForIndex(NodeInterface $node): self
+    public function buildForIndex(NodeInterface $node): SuggestionContextInterface
     {
         $this->contextValues = [
             'siteName' => $this->getSiteName($node),
@@ -40,7 +40,7 @@ class SuggestionContext implements SuggestionContextInterface
         return $this;
     }
 
-    public function buildForSearch(NodeInterface $node): self
+    public function buildForSearch(NodeInterface $node): SuggestionContextInterface
     {
         $this->contextValues = [
             'siteName' => $this->getSiteName($node),
