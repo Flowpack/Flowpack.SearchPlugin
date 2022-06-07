@@ -117,6 +117,26 @@ In case you need to build the URI to the suggest controller yourself, this is wh
 The suggestionContext determines, if a result should be displayed in suggetions. By default, nodes that are hidden are excluded.
 In many projects, the search als takes the Neos.Seo metaRobotsNoindex property into account or excludes certain nodeTypes. In order to adjust the suggestion context to your search logic, you can write your custom logic and switch the implementation of the `Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface` via Objects.yaml
 
+### Create URIs for suggestions
+
+To create valid links for suggestions the following package can be used:
+
+* [Punktde.OutOfBandRendering](https://github.com/punktDe/outofbandrendering)
+
+Connect the given example of this package with a custom fusion object:
+
+    pathToProtoType = Your.Vendor:Content.NodeLink
+
+And finally add the new property to the plugin settings:
+
+    Flowpack:
+      SearchPlugin:
+        searchAsYouType:
+          suggestions:
+            sourceFields:
+              - title
+              - __myProperty
+
 ## AJAX search
 
 The plugin comes with a controller that can be reached like this per default, using `GET`:
