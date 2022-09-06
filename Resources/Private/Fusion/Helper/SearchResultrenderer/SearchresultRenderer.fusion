@@ -4,5 +4,5 @@ prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(Neos.Fusion:Co
     itemRenderer = Flowpack.SearchPlugin:SingleResult
     itemName = 'node'
     // we also make the full ElasticSearch hit available to nested rendering, if possible
-    itemRenderer.@context.searchHit = ${searchResults.searchHitForNode(node)}
+    itemRenderer.@context.searchHit = ${Configuration.setting('Neos.Fusion.defaultContext.SearchResult') != NULL ? searchResults.searchHitForNode(node) : false}
 }
