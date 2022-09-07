@@ -1,14 +1,16 @@
 prototype(Flowpack.SearchPlugin:Helper.SuggestionSnippetRenderer) < prototype(Neos.Fusion:Component) {
+    class = 'fa'
+
     icon = Neos.Fusion:Case {
         default {
             condition = true
-            renderer = 'external-link-alt'
+            renderer = 'fa-external-link-alt'
             @position = 'end'
         }
     }
 
     renderer = afx`
-        <i class={['fa', 'fa-' + props.icon]}></i> {q(node).property('title')}
+        <i class={[class, props.icon]}></i> {q(node).property('title')}
     `
 }
 
