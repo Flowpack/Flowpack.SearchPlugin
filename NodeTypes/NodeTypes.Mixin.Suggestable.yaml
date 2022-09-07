@@ -18,3 +18,15 @@
               path: 'neos_suggestion_context'
 
         indexing: "${Flowpack.SearchPlugin.Suggestion.build(q(node).property('title') ? q(node).property('title') : '', 20)}"
+
+    __url:
+      search:
+        elasticSearchMapping:
+          type: keyword
+        indexing: '${FusionRendering.render(node, "suggestionUrlRenderer")}'
+
+    __snippet:
+      search:
+        elasticSearchMapping:
+          type: keyword
+        indexing: '${FusionRendering.render(node, "suggestionSnippetRenderer")}'

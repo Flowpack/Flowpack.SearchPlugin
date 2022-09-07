@@ -1,0 +1,20 @@
+prototype(Flowpack.SearchPlugin:Helper.SuggestionSnippetRenderer) < prototype(Neos.Fusion:Component) {
+    icon = Neos.Fusion:Case {
+        default {
+            condition = true
+            renderer = 'external-link-alt'
+            @position = 'end'
+        }
+    }
+
+    renderer = afx`
+        <i class={['fa', 'fa-' + props.icon]}></i> {q(node).property('title')}
+    `
+}
+
+##
+# This path is called by the ElasticSearch indexer while indexing all documents which use the
+# "Flowpack.SearchPlugin:SuggestableMixin" mixin. It is used to generate the frontend snippets for suggestions.
+# The snippet is automatically wrapped with link by the frontend plugin.
+#
+suggestionSnippetRenderer = Flowpack.SearchPlugin:Helper.SuggestionSnippetRenderer

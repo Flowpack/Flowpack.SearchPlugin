@@ -1,0 +1,17 @@
+prototype(Flowpack.SearchPlugin:Helper.SuggestionUrlRenderer) < prototype(Neos.Fusion:Case) {
+    default {
+        condition = true
+        renderer = Neos.Neos:NodeUri {
+            node = ${node}
+            absolute = true
+            format = 'html'
+        }
+        @position = 'end'
+    }
+}
+
+##
+# This path is called by the ElasticSearch indexer while indexing all documents which use the
+# "Flowpack.SearchPlugin:SuggestableMixin" mixin. It is used to generate the frontend uris for quick access.
+#
+suggestionUrlRenderer = Flowpack.SearchPlugin:Helper.SuggestionUrlRenderer
