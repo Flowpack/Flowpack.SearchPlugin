@@ -1,0 +1,41 @@
+/**
+ * Available css variables and defaults:
+ * --autocomplete-background: white
+ * --autocomplete-color: #222
+ * --autocomplete-width: 300px
+ * --autocomplete-max-width: 90vw
+ * --autocomplete-padding: 1rem
+ */
+
+.autocomplete-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--autocomplete-background, white);
+    color: var(--autocomplete-color, #222);
+    z-index: 999;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    width: var(--autocomplete-width, 300px);
+    max-width: var(--autocomplete-max-width, 90vw);
+    padding: var(--autocomplete-padding, 1rem);
+}
+
+.autocomplete-container ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.autocomplete-container li {
+    margin: .3rem 0;
+}
+
+.autocomplete-container__completions li {
+    cursor: pointer;
+}
+
+.autocomplete-container .fa {
+    width: 1rem;
+    margin-right: 0.5rem;
+}
