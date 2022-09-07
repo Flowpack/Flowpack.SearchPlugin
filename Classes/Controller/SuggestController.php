@@ -1,4 +1,5 @@
 <?php
+
 namespace Flowpack\SearchPlugin\Controller;
 
 /*
@@ -146,16 +147,20 @@ class SuggestController extends ActionController
                 ->limit(0);
 
             if (($this->searchAsYouTypeSettings['autocomplete']['enabled'] ?? false) === true) {
-                $query->aggregation('autocomplete', [
-                    'terms' => [
-                        'field' => 'neos_completion',
-                        'order' => [
-                            '_count' => 'desc'
-                        ],
-                        'include' => $termPlaceholder . '.*',
-                        'size' => $this->searchAsYouTypeSettings['autocomplete']['size'] ?? 10
-                    ]
-                ]);
+                // Based on recommendations from https://www.elastic.co/guide/en/elasticsearch/reference/7.2/search-as-you-type.html
+                $query
+                    ->limit($this->searchAsYouTypeSettings['suggestions']['size'] ?? 10)
+                    ->getRequest()->setValueByPath('query.bool.filter.bool.must', [
+                        'multi_match' => [
+                            'fields' => [
+                                'neos_completion',
+                                'neos_completion._2gram',
+                                'neos_completion._3gram',
+                            ],
+                            "type" => "bool_prefix",
+                            'query' => $termPlaceholder,
+                        ]
+                    ]);
             }
 
             if (($this->searchAsYouTypeSettings['suggestions']['enabled'] ?? false) === true) {
@@ -194,11 +199,9 @@ class SuggestController extends ActionController
      */
     protected function extractCompletions(array $response): array
     {
-        $aggregations = $response['aggregations'] ?? [];
-
-        return array_map(static function ($option) {
-            return $option['key'];
-        }, $aggregations['autocomplete']['buckets']);
+        return array_values(array_unique(array_map(static function ($option) {
+            return $option['_source']['title'];
+        }, $response['hits']['hits'] ?? [])));
     }
 
     /**

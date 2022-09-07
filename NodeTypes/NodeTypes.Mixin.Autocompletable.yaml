@@ -4,7 +4,5 @@
     'neos_completion':
       search:
         elasticSearchMapping:
-          type: text
-          analyzer: autocomplete
-          fielddata: true
+          type: search_as_you_type
         indexing: "${String.stripTags(q(node).property('title'))}"
