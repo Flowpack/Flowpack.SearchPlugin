@@ -1,7 +1,13 @@
+/**
+ * This plugin initialises all search forms which have the attribute `data-autocomplete-source` set
+ * and provides completions and suggestions when a user enters search terms.
+ */
 (() => {
     const searchForms = document.querySelectorAll('form[data-autocomplete-source]');
 
     /**
+     * Fills the autocomplete container with matches grouped by completion and suggestions
+     *
      * @param searchForm {HTMLFormElement}
      * @param autocompleteContainer {HTMLDivElement}
      * @param input {HTMLInputElement}
