@@ -20,19 +20,16 @@ interface SuggestionContextInterface
 
     /**
      * Build the context from a given node
-     * @param NodeInterface $node
      */
     public function buildForIndex(NodeInterface $node): SuggestionContextInterface;
 
     /**
      * Build the context from a given node
-     * @param NodeInterface $node
      */
     public function buildForSearch(NodeInterface $node): SuggestionContextInterface;
 
     /**
      * Returns the calculated context identifier
-     * @return string
      */
     public function getContextIdentifier(): string;
 }

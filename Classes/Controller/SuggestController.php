@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flowpack\SearchPlugin\Controller;
 
@@ -17,11 +18,13 @@ use Flowpack\ElasticSearch\ContentRepositoryAdaptor\ElasticSearchClient;
 use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Exception\QueryBuildingException;
 use Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface;
 use Flowpack\SearchPlugin\Utility\SearchTerm;
+use Neos\Cache\Exception as CacheException;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
+use Neos\Flow\Persistence\Exception\IllegalObjectTypeException;
 use Neos\Neos\Controller\CreateContentContextTrait;
 
 class SuggestController extends ActionController
@@ -63,7 +66,7 @@ class SuggestController extends ActionController
      */
     protected $searchAsYouTypeSettings = [];
 
-    public function initializeObject()
+    public function initializeObject(): void
     {
         if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
             $this->elasticSearchClient = $this->objectManager->get(ElasticSearchClient::class);
@@ -72,12 +75,7 @@ class SuggestController extends ActionController
     }
 
     /**
-     * @param string $term
-     * @param string $contextNodeIdentifier
-     * @param string $dimensionCombination
-     * @return void
-     * @throws QueryBuildingException
-     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
+     * @throws QueryBuildingException|IllegalObjectTypeException|CacheException
      */
     public function indexAction(string $term = '', string $contextNodeIdentifier = '', string $dimensionCombination = null): void
     {
@@ -110,13 +108,7 @@ class SuggestController extends ActionController
     }
 
     /**
-     * @param string $term
-     * @param string $contextNodeIdentifier
-     * @param string|null $dimensionCombination
-     * @return string
-     * @throws QueryBuildingException
-     * @throws \Neos\Cache\Exception
-     * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
+     * @throws QueryBuildingException|CacheException|IllegalObjectTypeException
      */
     protected function buildRequestForTerm(string $term, string $contextNodeIdentifier, string $dimensionCombination = null): string
     {
@@ -133,7 +125,7 @@ class SuggestController extends ActionController
             $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
 
             if (!$contextNode instanceof NodeInterface) {
-                throw new \Exception(sprintf('The context node for search with identifier %s could not be found', $contextNodeIdentifier), 1634467679);
+                throw new \RuntimeException(sprintf('The context node for search with identifier %s could not be found', $contextNodeIdentifier), 1634467679);
             }
 
             $sourceFields = array_filter($this->searchAsYouTypeSettings['suggestions']['sourceFields'] ?? ['neos_path']);
@@ -193,9 +185,6 @@ class SuggestController extends ActionController
 
     /**
      * Extract autocomplete options
-     *
-     * @param array $response
-     * @return array
      */
     protected function extractCompletions(array $response): array
     {
@@ -206,9 +195,6 @@ class SuggestController extends ActionController
 
     /**
      * Extract suggestion options
-     *
-     * @param array $response
-     * @return array
      */
     protected function extractSuggestions(array $response): array
     {

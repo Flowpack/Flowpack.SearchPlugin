@@ -24,7 +24,7 @@ class SearchTermHelper implements ProtectedContextAwareInterface
         return SearchTerm::sanitize($term);
     }
 
-    public function allowsCallOfMethod($methodName)
+    public function allowsCallOfMethod($methodName): bool
     {
         return true;
     }

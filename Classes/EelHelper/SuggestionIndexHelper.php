@@ -27,12 +27,6 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 {
 
     /**
-     * Rhe length of '/sites/'
-     * @var int
-     */
-    protected const SITES_OFFSET = 7;
-
-    /**
      * @Flow\Inject
      * @var SuggestionContextInterface
      */
@@ -41,10 +35,9 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
     /**
      * @param string|array $input The input to store, this can be a an array of strings or just a string. This field is mandatory.
      * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
-     * @return array
      * @throws Exception
      */
-    public function build($input, $weight = 1): array
+    public function build($input, int $weight = 1): array
     {
         return [
             'input' => $this->prepareInput($input),
@@ -59,7 +52,6 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 
     /**
      * @param string|array $input
-     * @return array
      * @throws Exception
      */
     protected function prepareInput($input): ?array
@@ -86,11 +78,8 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
 
     /**
      * All methods are considered safe
-     *
-     * @param string $methodName
-     * @return boolean
      */
-    public function allowsCallOfMethod($methodName)
+    public function allowsCallOfMethod($methodName): bool
     {
         return true;
     }

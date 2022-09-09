@@ -61,10 +61,6 @@ class SuggestionContext implements SuggestionContextInterface
         return $this->getContextIdentifier();
     }
 
-    /**
-     * @param NodeInterface $node
-     * @return string
-     */
     protected function getSiteName(NodeInterface $node): string
     {
         return substr($node->getPath(), self::SITES_OFFSET, strpos($node->getPath() . '/', '/', self::SITES_OFFSET) - self::SITES_OFFSET);
