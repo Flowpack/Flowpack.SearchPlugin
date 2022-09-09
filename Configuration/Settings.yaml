@@ -8,5 +8,6 @@ Flowpack:
         size: 10
         enabled: true
         sourceFields:
-          - neos_path
           - title
+          - __url
+          - __snippet

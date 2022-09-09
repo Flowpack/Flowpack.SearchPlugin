@@ -23,10 +23,10 @@
       search:
         elasticSearchMapping:
           type: keyword
-        indexing: '${FusionRendering.render(node, "suggestionUrlRenderer")}'
+        indexing: '${Flowpack.SearchPlugin.Fusion.render(node, "suggestionUrlRenderer")}'
 
     __snippet:
       search:
         elasticSearchMapping:
           type: keyword
-        indexing: '${FusionRendering.render(node, "suggestionSnippetRenderer")}'
+        indexing: '${Flowpack.SearchPlugin.Fusion.render(node, "suggestionSnippetRenderer")}'

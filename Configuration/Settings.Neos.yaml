@@ -16,3 +16,4 @@ Neos:
     Search:
       defaultContext:
         Flowpack.SearchPlugin.Suggestion: Flowpack\SearchPlugin\EelHelper\SuggestionIndexHelper
+        Flowpack.SearchPlugin.Fusion: Flowpack\SearchPlugin\Eel\FusionRenderingHelper
