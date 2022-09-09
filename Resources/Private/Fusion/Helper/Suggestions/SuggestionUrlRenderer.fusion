@@ -1,13 +1,17 @@
-prototype(Flowpack.SearchPlugin:Helper.SuggestionUrlRenderer) < prototype(Neos.Fusion:Case) {
-    default {
-        condition = true
-        renderer = Neos.Neos:NodeUri {
-            node = ${node}
-            absolute = true
-            format = 'html'
+prototype(Flowpack.SearchPlugin:Helper.SuggestionUrlRenderer) < prototype(Neos.Fusion:Component) {
+    url = Neos.Fusion:Case {
+        default {
+            condition = true
+            renderer = Neos.Neos:NodeUri {
+                node = ${node}
+                absolute = true
+                format = 'html'
+            }
+            @position = 'end'
         }
-        @position = 'end'
     }
+
+    renderer = ${props.url}
 }
 
 ##
