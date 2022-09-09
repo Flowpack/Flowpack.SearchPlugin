@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Flowpack\SearchPlugin\Eel;
+namespace Flowpack\SearchPlugin\EelHelper;
 
 /*
  * This file is part of the Flowpack.SearchPlugin package.

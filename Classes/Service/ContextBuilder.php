@@ -32,7 +32,7 @@ use Psr\Http\Message\UriFactoryInterface;
 class ContextBuilder
 {
     /**
-     * @Flow\InjectConfiguration(path="urlSchemaAndHost")
+     * @Flow\InjectConfiguration(path="searchAsYouType.suggestions.urlSchemaAndHost")
      * @var string
      */
     protected $urlSchemeAndHostFromConfiguration;

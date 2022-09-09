@@ -10,7 +10,7 @@ prototype(Flowpack.SearchPlugin:Helper.SuggestionSnippetRenderer) < prototype(Ne
     }
 
     renderer = afx`
-        <i class={[class, props.icon]}></i> {q(node).property('title')}
+        <i class={[props.class, props.icon]}></i> {q(node).property('title')}
     `
 }
 

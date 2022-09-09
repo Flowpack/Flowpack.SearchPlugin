@@ -5,6 +5,7 @@ Flowpack:
         size: 10
         enabled: true
       suggestions:
+        urlSchemaAndHost: 'http://localhost'
         size: 10
         enabled: true
         sourceFields:
