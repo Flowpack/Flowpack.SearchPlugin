@@ -141,7 +141,7 @@ class SuggestController extends ActionController
             if (($this->searchAsYouTypeSettings['autocomplete']['enabled'] ?? false) === true) {
                 // Based on recommendations from https://www.elastic.co/guide/en/elasticsearch/reference/7.2/search-as-you-type.html
                 $query
-                    ->limit($this->searchAsYouTypeSettings['suggestions']['size'] ?? 10)
+                    ->limit($this->searchAsYouTypeSettings['autocomplete']['size'] ?? 10)
                     ->getRequest()->setValueByPath('query.bool.filter.bool.must', [
                         'multi_match' => [
                             'fields' => [
@@ -149,7 +149,7 @@ class SuggestController extends ActionController
                                 'neos_completion._2gram',
                                 'neos_completion._3gram',
                             ],
-                            "type" => "bool_prefix",
+                            'type' => 'bool_prefix',
                             'query' => $termPlaceholder,
                         ]
                     ]);

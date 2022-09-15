@@ -33,7 +33,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
     protected $suggestionContext;
 
     /**
-     * @param string|array $input The input to store, this can be a an array of strings or just a string. This field is mandatory.
+     * @param string|array $input The input to store, this can be an array of strings or just a string. This field is mandatory.
      * @param int $weight A positive integer or a string containing a positive integer, which defines a weight and allows you to rank your suggestions.
      * @throws Exception
      */
