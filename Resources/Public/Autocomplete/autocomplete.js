@@ -91,7 +91,9 @@
             const query = event.target.value.trim();
             const url = `${dataSource}&term=${encodeURIComponent(query)}`;
 
-            fetch(url)
+            fetch(url, {
+                credentials: 'include'
+            })
                 .then((response) => response.json())
                 .then(({completions, suggestions}) => {
                     populateAutocompleteContainer(searchForm, autocompleteContainer, input, query, completions, suggestions);
