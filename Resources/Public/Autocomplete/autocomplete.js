@@ -47,6 +47,7 @@
             completionsList.addEventListener('click', (event) => {
                 if (event.target.parentElement === completionsList) {
                     input.value = event.target.innerText;
+                    closeAutocompleteContainer(autocompleteContainer);
                     searchForm.submit();
                 }
             });
@@ -74,6 +75,13 @@
     }
 
     /**
+     * @param autocompleteContainer {HTMLDivElement}
+     */
+    function closeAutocompleteContainer(autocompleteContainer) {
+        autocompleteContainer.style.display = 'none';
+    }
+
+    /**
      * @param searchForm {HTMLFormElement}
      */
     searchForms.forEach((searchForm) => {
@@ -81,6 +89,22 @@
         const input = searchForm.querySelector('input[type="search"]');
         const autocompleteContainer = document.createElement('div');
         autocompleteContainer.classList.add('autocomplete-container');
+
+        // Close the autocomplete container when pressing "escape"
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'Escape') {
+                closeAutocompleteContainer(autocompleteContainer);
+            }
+        });
+
+        // Close the autocomplete container when clicking outside of it
+        document.addEventListener('click', (event) => {
+            if (!autocompleteContainer.contains(event.target)) {
+                closeAutocompleteContainer(autocompleteContainer);
+            }
+        });
+
+        // TODO: Implement navigating completions and suggestions with cursor keys
 
         // Allow positioning the autocomplete container relative to the input
         searchForm.style.position = 'relative';
