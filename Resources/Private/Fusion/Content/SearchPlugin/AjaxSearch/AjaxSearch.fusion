@@ -1,7 +1,11 @@
-prototype(Flowpack.SearchPlugin:AjaxSearch) < prototype(Neos.Fusion:Template) {
-    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/AjaxSearch/AjaxSearch.html'
-
+prototype(Flowpack.SearchPlugin:AjaxSearch) < prototype(Neos.Fusion:Component) {
     searchResultRenderer = Flowpack.SearchPlugin:SearchResultRenderer {
         @context.searchResults = ${Search.query(site).fulltext(request.arguments.q).execute()}
     }
+
+    renderer = afx`
+        <div>
+            {props.searchResultRenderer}
+        </div>
+    `
 }

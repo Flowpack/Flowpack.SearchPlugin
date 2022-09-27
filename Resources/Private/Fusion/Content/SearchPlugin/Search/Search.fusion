@@ -1,32 +1,55 @@
-prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
-    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Search/Search.html'
-
+prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:ContentComponent) {
     searchTerm = ${String.toString(request.arguments.search)}
-    searchQuery = ${this.searchTerm ? Search.query(site).fulltext(this.searchTerm).nodeType('Neos.Neos:Document') : null}
+    @context.searchTerm = ${this.searchTerm}
 
-    totalSearchResults = ${this.searchQuery.count()}
+    searchQuery = ${this.searchTerm ? Search.query(site) : null}
+    searchQuery.@process {
+        fulltext = ${value ? value.fulltext(request.arguments.search) : value}
+        nodeType = ${value ? value.nodeType('Neos.Neos:Document') : value}
+        excludeHidden = ${value ? value.exclude('neos_hidden_in_index', true) : value}
+    }
 
     searchForm = Flowpack.SearchPlugin:Search.Form
 
-    configuration = Neos.Fusion:RawArray {
+    attributes = Neos.Fusion:Attributes {
+        class = 'search-plugin'
+    }
+
+    configuration = Neos.Fusion:DataStructure {
         itemsPerPage = 25
         insertAbove = false
         insertBelow = true
         maximumNumberOfLinks = 10
     }
 
-    searchResultRenderer = Neos.Fusion:Tag {
-        tagName = 'ol'
-        content = Flowpack.SearchPlugin:SearchResultRenderer
+    renderer = Neos.Fusion:Template {
+        attributes = ${props.attributes}
+        searchForm = ${props.searchForm}
+        searchQuery = ${props.searchQuery}
+        configuration = ${props.configuration}
+
+        searchResultRenderer = afx`
+            <ol>
+                <Flowpack.SearchPlugin:SearchResultRenderer />
+            </ol>
+        `
+        prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
+
+        totalSearchResults = ${this.searchQuery.count()}
+
+        templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Search/Search.html'
     }
-    prototype(Flowpack.SearchPlugin:SingleResult).@process.wrap = ${'<li>' + value + '</li>'}
 
     @cache {
-        mode = 'uncached'
+        mode = 'dynamic'
+        entryIdentifier {
+            node = ${node}
+        }
+        entryDiscriminator = ${request.arguments.search || request.arguments.page ? false : 'static'}
         context {
-            1 = 'site'
-            2 = 'node'
-            3 = 'documentNode'
+            site = 'site'
+            node = 'node'
+            documentNode = 'documentNode'
         }
     }
 }

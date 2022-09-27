@@ -6,6 +6,10 @@
                 <source>Search</source>
                 <target xml:lang="de" state="translated">Suchen</target>
             </trans-unit>
+            <trans-unit id="placeholder" xml:space="preserve">
+                <source>Search</source>
+                <target>Suche</target>
+            </trans-unit>
             <trans-unit id="searchShowingResults" xml:space="preserve">
                 <source>Showing {0} of {1} results</source>
                 <target xml:lang="de" state="translated">Zeige {0} von {1} Ergebnissen</target>
@@ -14,7 +18,10 @@
                 <source>Path</source>
                 <target xml:lang="de" state="translated">Pfad</target>
             </trans-unit>
-
+            <trans-unit id="suggestionsHeader" xml:space="preserve">
+                <source>Suggestions</source>
+                <target>Vorschläge</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

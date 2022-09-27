@@ -6,6 +6,19 @@
     const searchForms = document.querySelectorAll('form[data-autocomplete-source]');
 
     /**
+     * @param key {string}
+     * @param fallback {string}
+     * @param translations {Object<string, string>}
+     * @returns {string}
+     */
+    function translate(key, fallback, translations) {
+        if (translations[key] !== undefined) {
+            return translations[key];
+        }
+        return fallback;
+    }
+
+    /**
      * Fills the autocomplete container with matches grouped by completion and suggestions
      *
      * @param searchForm {HTMLFormElement}
@@ -14,6 +27,7 @@
      * @param query {string}
      * @param completions {array<string>}
      * @param suggestions {array<{ title: string, __url: string, __snippet: string }>}
+     * @param translations {Object<string, string>}
      */
     function populateAutocompleteContainer(
         searchForm,
@@ -21,7 +35,8 @@
         input,
         query,
         completions,
-        suggestions
+        suggestions,
+        translations
     ) {
         // TODO: Reuse the previous html structure if possible
         autocompleteContainer.innerHTML = '';
@@ -29,10 +44,6 @@
         const queryRegex = new RegExp(`(${query})`, 'ig');
 
         if (completions.length > 0) {
-            const completionsHeader = document.createElement('h3');
-            completionsHeader.innerText = 'Completions';
-            autocompleteContainer.appendChild(completionsHeader);
-
             const completionsList = document.createElement('ol');
             completionsList.classList.add('autocomplete-container__completions');
             completions.forEach((completion) => {
@@ -55,8 +66,9 @@
         }
 
         if (suggestions.length > 0) {
-            const suggestionsHeader = document.createElement('h3');
-            suggestionsHeader.innerText = 'Suggestions';
+            const suggestionsHeader = document.createElement('div');
+            suggestionsHeader.classList.add('autocomplete-container__suggestions-header');
+            suggestionsHeader.innerText = translate('suggestionsHeader', 'Suggestions', translations);
             autocompleteContainer.appendChild(suggestionsHeader);
 
             const suggestionsList = document.createElement('ol');
@@ -86,6 +98,7 @@
      */
     searchForms.forEach((searchForm) => {
         const dataSource = searchForm.dataset.autocompleteSource;
+        const translations = searchForm.dataset.translations ? JSON.parse(searchForm.dataset.translations) : {};
         const input = searchForm.querySelector('input[type="search"]');
         const autocompleteContainer = document.createElement('div');
         autocompleteContainer.classList.add('autocomplete-container');
@@ -120,7 +133,7 @@
             })
                 .then((response) => response.json())
                 .then(({completions, suggestions}) => {
-                    populateAutocompleteContainer(searchForm, autocompleteContainer, input, query, completions, suggestions);
+                    populateAutocompleteContainer(searchForm, autocompleteContainer, input, query, completions, suggestions, translations);
                 })
                 .catch((error) => {
                     // TODO: Show error in frontend

@@ -1,9 +1,25 @@
-prototype(Neos.Neos:DocumentSearchResult) < prototype(Neos.Fusion:Template) {
-    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Component/DocumentSearchResult/DocumentSearchResult.html'
+prototype(Neos.Neos:DocumentSearchResult) < prototype(Neos.Fusion:Component) {
     node = ${node}
     highlight = ${Flowpack.SearchPlugin.Array.flatten(searchHit.highlight)}
-
     title = ${q(node).property('title')}
     description = ''
     parents = ${Array.reverse(q(node).parents('[instanceof Neos.Neos:Document]').get())}
+
+    renderer = afx`
+        <Neos.Neos:NodeLink node={props.node}>{props.title}</Neos.Neos:NodeLink>
+
+        <p @if.highlight={props.highlight}>
+            <Neos.Fusion:Loop items={props.highlight} itemName="fragment">
+                {fragment}{iteration.isLast ? '' : '…'}
+            </Neos.Fusion:Loop>
+        </p>
+
+        <div class="breadcrumb">
+            <span>{I18n.translate('path', '', [], 'Main', 'Flowpack.SearchPlugin')}: </span>
+            <Neos.Fusion:Loop items={props.parents} itemName="parent">
+                <Neos.Neos:NodeLink node={parent}/>{' / '}
+            </Neos.Fusion:Loop>
+            <Neos.Neos:NodeLink node={props.node}/>
+        </div>
+    `
 }

@@ -1,8 +1,71 @@
-prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Template) {
+prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Component) {
     node = ${site}
-    dimensionCombination = ${Json.stringify(this.node.context.dimensions)}
-    templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Form/Form.html'
-
+    formClassNames = 'search-form'
     inputClassNames = ''
-    searchWord = ${request.arguments.search}
+    searchResultsPage = ${documentNode}
+    submitButtonLabel = ${I18n.translate('search', 'Search', [], 'Main', 'Flowpack.SearchPlugin')}
+    placeholder = ${I18n.translate('placeholder', 'Search', [], 'Main', 'Flowpack.SearchPlugin')}
+
+    renderer = Neos.Fusion:Component {
+        @apply.props = ${props}
+
+        searchTerm = ${String.toString(request.arguments.search)}
+
+        action = Neos.Neos:NodeUri {
+            node = ${props.searchResultsPage}
+        }
+
+        autocompleteSource = Neos.Fusion:UriBuilder {
+            action = 'index'
+            controller = 'Suggest'
+            package = 'Flowpack.SearchPlugin'
+            format = 'json'
+            absolute = true
+            arguments = Neos.Fusion:DataStructure {
+                contextNodeIdentifier = ${props.node.identifier}
+                dimensionCombination = ${Json.stringify(props.node.context.dimensions)}
+            }
+        }
+
+        // Translations for the frontend plugin
+        translations = Neos.Fusion:DataStructure {
+            suggestionsHeader = ${I18n.translate('suggestionsHeader', 'Suggestions', [], 'Main', 'Flowpack.SearchPlugin')}
+        }
+
+        renderer = afx`
+            <form
+                method="get"
+                action={props.action}
+                class={props.formClassNames}
+                data-translations={Json.stringify(props.translations)}
+                data-autocomplete-source={props.autocompleteSource}
+            >
+                <input
+                    type="search"
+                    name="search"
+                    value={props.searchTerm}
+                    class={props.inputClassNames}
+                    autocomplete="off"
+                    placeholder={props.placeholder}
+                />
+                <button type="submit">
+                    {props.submitButtonLabel}
+                </button>
+            </form>
+        `
+    }
+
+    @cache {
+        mode = 'dynamic'
+        entryIdentifier {
+            static = 'search-form'
+            documentNode = ${documentNode}
+        }
+        entryDiscriminator = ${request.arguments.search || request.arguments.page ? false : 'static'}
+        context {
+            site = 'site'
+            node = 'node'
+            documentNode = 'documentNode'
+        }
+    }
 }
