@@ -24,10 +24,7 @@ class SuggestionContext implements SuggestionContextInterface
      */
     protected const SITES_OFFSET = 7;
 
-    /**
-     * @var array
-     */
-    protected $contextValues = [];
+    protected array $contextValues = [];
 
     public function buildForIndex(NodeInterface $node): SuggestionContextInterface
     {

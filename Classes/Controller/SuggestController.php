@@ -163,7 +163,7 @@ class SuggestController extends ActionController
                         'fuzzy' => true,
                         'size' => $this->searchAsYouTypeSettings['suggestions']['size'] ?? 10,
                         'contexts' => [
-                            'suggestion_context' => $this->suggestionContext->buildForSearch($contextNode)->getContextIdentifier()
+                            'suggestion_context' => $this->suggestionContext->buildForSearch($contextNode)->getContextIdentifier(),
                         ]
                     ]
                 ]);
