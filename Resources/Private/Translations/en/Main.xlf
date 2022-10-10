@@ -8,6 +8,9 @@
             <trans-unit id="placeholder" xml:space="preserve">
                 <source>Search</source>
             </trans-unit>
+            <trans-unit id="submit" xml:space="preserve">
+                <source>Submit</source>
+            </trans-unit>
             <trans-unit id="searchShowingResults" xml:space="preserve">
                 <source>Showing {0} of {1} results</source>
             </trans-unit>

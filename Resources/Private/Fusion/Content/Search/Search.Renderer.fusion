@@ -1,0 +1,23 @@
+prototype(Flowpack.SearchPlugin:Component.Search.Renderer) < prototype(Neos.Fusion:Component) {
+    paginatedResults = ${[]}
+    totalSearchResults = 0
+    searchTerm = ''
+
+    prototype(Flowpack.SearchPlugin:SingleResult) {
+        @process.wrap = ${'<li>' + value + '</li>'}
+    }
+
+    renderer = afx`
+        <div class="search-plugin">
+            <Flowpack.SearchPlugin:Search.Form />
+            <span>{I18n.translate('searchShowingResults', null, [props.paginatedResults.results.accessibleCount, props.totalSearchResults], 'Main', 'Flowpack.SearchPlugin')}</span>
+            <ol>
+                <Flowpack.SearchPlugin:SearchResultRenderer items={props.paginatedResults.results} />
+            </ol>
+            <Flowpack.SearchPlugin:Search.Pagination
+                searchTerm={props.searchTerm}
+                {...props.paginatedResults.pagination}
+            />
+        </div>
+    `
+}

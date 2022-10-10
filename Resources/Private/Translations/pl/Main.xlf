@@ -6,6 +6,14 @@
                 <source>Search</source>
                 <target xml:lang="pl" state="translated">Szukaj</target>
             </trans-unit>
+            <trans-unit id="placeholder" xml:space="preserve">
+                <source>Search</source>
+                <target xml:lang="pl" state="translated">Szukaj</target>
+            </trans-unit>
+            <trans-unit id="search" xml:space="preserve">
+                <source>Submit</source>
+                <target xml:lang="pl" state="translated">Składać</target>
+            </trans-unit>
             <trans-unit id="searchShowingResults" xml:space="preserve">
                 <source>Showing {0} of {1} results</source>
                 <target xml:lang="pl" state="translated">Pokazuje {0} z {1} wyników</target>

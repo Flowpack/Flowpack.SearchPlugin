@@ -10,6 +10,10 @@
                 <source>Search</source>
                 <target>Suche</target>
             </trans-unit>
+            <trans-unit id="submit" xml:space="preserve">
+                <source>Submit</source>
+                <target xml:lang="de" state="translated">Absenden</target>
+            </trans-unit>
             <trans-unit id="searchShowingResults" xml:space="preserve">
                 <source>Showing {0} of {1} results</source>
                 <target xml:lang="de" state="translated">Zeige {0} von {1} Ergebnissen</target>

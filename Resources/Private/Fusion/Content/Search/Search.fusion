@@ -1,0 +1,37 @@
+prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:ContentComponent) {
+    # Set the 2nd param `strict` to true to remove characters, which are reserved in Elasticsearch from the search term to prevent errors.
+    # This blocks the explicit use of wildcards (`*`) and phrase search.
+    searchTerm = ${Flowpack.SearchPlugin.SearchTerm.sanitize(request.arguments.search, false)}
+    currentPage = ${String.toInteger(request.arguments.currentPage)}
+
+    # Build the query. Extensible by adding additinal processes to the query.
+    searchQuery = ${this.searchTerm ? Search.query(site) : null}
+    searchQuery.@process {
+        fulltext = ${value ? value.fulltext(request.arguments.search) : value}
+        nodeType = ${value ? value.nodeType('Neos.Neos:Document') : value}
+        excludeHidden = ${value ? value.exclude('neos_hidden_in_index', true) : value}
+    }
+
+    # Pagination configuration
+    itemsPerPage = 25
+    maximumNumberOfLinks = 10
+
+    renderer = Flowpack.SearchPlugin:Component.Search.Renderer {
+        paginatedResults = ${Flowpack.SearchPlugin.Paginate.paginate(props.searchQuery, props.itemsPerPage, props.maximumNumberOfLinks, props.currentPage)}
+        totalSearchResults = ${props.searchQuery.count()}
+        searchTerm = ${props.searchTerm}
+    }
+
+    @cache {
+        mode = 'dynamic'
+        entryIdentifier {
+            node = ${node}
+        }
+        entryDiscriminator = ${request.arguments.search || request.arguments.page ? false : 'static'}
+        context {
+            site = 'site'
+            node = 'node'
+            documentNode = 'documentNode'
+        }
+    }
+}

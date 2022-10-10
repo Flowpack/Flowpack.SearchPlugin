@@ -19,9 +19,10 @@ use Neos\Eel\ProtectedContextAwareInterface;
 class SearchTermHelper implements ProtectedContextAwareInterface
 {
 
-    public function sanitize(string $term): string
+    public function sanitize(?string $term, bool $strict = true): string
     {
-        return SearchTerm::sanitize($term);
+         $term = trim((string)$term);
+         return $strict ? SearchTerm::sanitize($term) : $term;
     }
 
     public function allowsCallOfMethod($methodName): bool

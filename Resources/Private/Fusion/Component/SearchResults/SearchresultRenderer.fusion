@@ -1,6 +1,5 @@
 prototype(Flowpack.SearchPlugin:SearchResultRenderer) < prototype(Neos.Fusion:Loop) {
-    // the "searchResults" are filled from the <search:widget.paginate> ViewHelper.
-    items = ${searchResults}
+    items = ${[]}
     itemName = 'node'
     itemRenderer = Flowpack.SearchPlugin:SingleResult
     // we also make the full ElasticSearch hit available to nested rendering, if possible

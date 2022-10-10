@@ -1,0 +1,71 @@
+prototype(Flowpack.SearchPlugin:Component.Pagination) < prototype(Neos.Fusion:Component) {
+    searchTerm = ''
+
+    pages = null
+    currentPage = 1
+    numberOfPages = 0
+    displayRangeStart = 1
+    displayRangeEnd = 0
+    hasLessPages = false
+    hasMorePages = false
+    nextPage = null
+    previousPage = null
+
+    paginationBaseUrl = Neos.Fusion:Case {
+        hasNodeContext {
+            condition = ${documentNode && String.length(documentNode.context.workspace.name)}
+            renderer = Neos.Fusion:Join {
+                uri = Neos.Neos:NodeUri {
+                    node = ${documentNode}
+                    arguments = Neos.Fusion:DataStructure {
+                        search = ${searchTerm}
+                    }
+                    argumentsToBeExcludedFromQueryString = ${['currentPage']}
+                    addQueryString = true
+                }
+                pageArgument = '&currentPage='
+            }
+        }
+        default {
+            condition = true
+            renderer = '#'
+        }
+    }
+
+    renderer = afx`
+        <nav aria-label="Navigation der Suchergebnisse">
+            <ul class='pagination'>
+                <li
+                    class={['pagination_prev', !props.previousPage && 'pagination_prev--disabled']}
+                    aria-hidden={!props.previousPage ? 'true' : 'false'}
+                >
+                    <Neos.Fusion:Link.Action @if.hasPreviousPage={props.previousPage} href={props.previousPage ? props.paginationBaseUrl + props.previousPage : null}>
+                        <span class="icon" aria-hidden="true" />
+                        <span class="sr-only">vorherige Seite</span>
+                    </Neos.Fusion:Link.Action>
+                </li>
+                <Neos.Fusion:Loop items={props.pages} itemName='page'>
+                    <li class={['pagination_number', page.isCurrent && 'pagination_number--active']}>
+                        <a
+                            href={props.paginationBaseUrl + page.number}
+                            aria-label={(page.isCurrent ? 'Aktuelle Seite, ' : '') + 'Seite ' + page.number}
+                        >
+                            <span>{page.number}</span>
+                        </a>
+                    </li>
+                </Neos.Fusion:Loop>
+                <li
+                    class={['pagination_next', !props.nextPage && 'pagination_next--disabled']}
+                    aria-hidden={!props.nextPage ? 'true' : 'false'}
+                >
+                    <Neos.Fusion:Link.Action @if.hasNextPage={props.nextPage} href={props.nextPage ? props.paginationBaseUrl + props.nextPage : null}>
+                        <span class="icon" aria-hidden="true" />
+                        <span class="sr-only">nächste Seite</span>
+                    </Neos.Fusion:Link.Action>
+                </li>
+            </ul>
+        </nav>
+    `
+
+    @if.hasMoreThanOnePage = ${this.pages && this.numberOfPages > 1}
+}
