@@ -5,4 +5,8 @@ prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Template) {
 
     inputClassNames = ''
     searchWord = ${request.arguments.search}
+
+    // Sanitize Parameter to prevent XSS-Attacks
+    searchWord.@process.stripTags = ${String.stripTags(value)}
+    searchWord.@process.htmlSpecialChars = ${String.htmlSpecialChars(value)}
 }
