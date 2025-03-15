@@ -13,38 +13,41 @@ namespace Flowpack\SearchPlugin\Suggestion;
  * source code.
  */
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\NodeType\NodeTypeNames;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\FindClosestNodeFilter;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Filter\NodeType\NodeTypeCriteria;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
+use Neos\Flow\Annotations as Flow;
+use Neos\Neos\Domain\Service\NodeTypeNameFactory;
+use Neos\Neos\Domain\SubtreeTagging\NeosSubtreeTag;
 
 class SuggestionContext implements SuggestionContextInterface
 {
-
-    /**
-     * Rhe length of '/sites/'
-     * @var int
-     */
-    protected const SITES_OFFSET = 7;
-
     /**
      * @var array
      */
     protected $contextValues = [];
 
-    public function buildForIndex(NodeInterface $node): SuggestionContextInterface
+    #[Flow\Inject]
+    protected ContentRepositoryRegistry $contentRepositoryRegistry;
+
+    public function buildForIndex(Node $node): SuggestionContextInterface
     {
         $this->contextValues = [
             'siteName' => $this->getSiteName($node),
-            'workspace' => $node->getWorkspace()->getName(),
-            'isHidden' => $node->isHidden() ? 'hidden' : 'visible',
+            'workspace' => $node->workspaceName->value,
+            'isHidden' => $node->tags->contain(NeosSubtreeTag::disabled()) ? 'hidden' : 'visible',
         ];
 
         return $this;
     }
 
-    public function buildForSearch(NodeInterface $node): SuggestionContextInterface
+    public function buildForSearch(Node $node): SuggestionContextInterface
     {
         $this->contextValues = [
             'siteName' => $this->getSiteName($node),
-            'workspace' => $node->getWorkspace()->getName(),
+            'workspace' => $node->workspaceName->value,
             'isHidden' => 'visible',
         ];
 
@@ -62,11 +65,20 @@ class SuggestionContext implements SuggestionContextInterface
     }
 
     /**
-     * @param NodeInterface $node
+     * @param Node $node
      * @return string
      */
-    protected function getSiteName(NodeInterface $node): string
+    protected function getSiteName(Node $node): string
     {
-        return substr($node->getPath(), self::SITES_OFFSET, strpos($node->getPath() . '/', '/', self::SITES_OFFSET) - self::SITES_OFFSET);
+        $subgraph = $this->contentRepositoryRegistry->subgraphForNode($node);
+        $siteNode = $subgraph->findClosestNode($node->aggregateId, FindClosestNodeFilter::create(
+            NodeTypeCriteria::createWithAllowedNodeTypeNames(
+                NodeTypeNames::with(
+                    NodeTypeNameFactory::forSite()
+                )
+            )
+        ));
+
+        return $siteNode->name->value;
     }
 }

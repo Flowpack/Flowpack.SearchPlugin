@@ -1,4 +1,5 @@
 <?php
+
 namespace Flowpack\SearchPlugin\Controller;
 
 /*
@@ -17,16 +18,16 @@ use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Exception\QueryBuildingExcep
 use Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface;
 use Flowpack\SearchPlugin\Utility\SearchTerm;
 use Neos\Cache\Frontend\VariableFrontend;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
+use Neos\ContentRepository\Core\SharedModel\Node\NodeAddress;
+use Neos\ContentRepository\Core\SharedModel\Workspace\WorkspaceName;
+use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
-use Neos\Neos\Controller\CreateContentContextTrait;
 
 class SuggestController extends ActionController
 {
-    use CreateContentContextTrait;
-
     /**
      * @var ElasticSearchClient
      */
@@ -62,6 +63,10 @@ class SuggestController extends ActionController
      */
     protected $searchAsYouTypeSettings = [];
 
+
+    #[Flow\Inject()]
+    protected ContentRepositoryRegistry $contentRepositoryRegistry;
+
     public function initializeObject()
     {
         if ($this->objectManager->isRegistered(ElasticSearchClient::class)) {
@@ -72,13 +77,13 @@ class SuggestController extends ActionController
 
     /**
      * @param string $term
-     * @param string $contextNodeIdentifier
+     * @param string $contextNode
      * @param string $dimensionCombination
      * @return void
      * @throws QueryBuildingException
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      */
-    public function indexAction(string $term = '', string $contextNodeIdentifier = '', string $dimensionCombination = null): void
+    public function indexAction(string $term = '', string $contextNode = ''): void
     {
         if ($this->elasticSearchClient === null) {
             throw new \RuntimeException('The SuggestController needs an ElasticSearchClient, it seems you run without the flowpack/elasticsearch-contentrepositoryadaptor package, though.', 1487189823);
@@ -95,7 +100,8 @@ class SuggestController extends ActionController
             return;
         }
 
-        $requestJson = $this->buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination);
+        $contextNodeAddress = NodeAddress::fromJsonString($contextNode);
+        $requestJson = $this->buildRequestForTerm($term, $contextNodeAddress);
 
         try {
             $response = $this->elasticSearchClient->getIndex()->request('POST', '/_search', [], $requestJson)->getTreatedContent();
@@ -110,16 +116,16 @@ class SuggestController extends ActionController
 
     /**
      * @param string $term
-     * @param string $contextNodeIdentifier
+     * @param string $contextNode
      * @param string|null $dimensionCombination
      * @return string
      * @throws QueryBuildingException
      * @throws \Neos\Cache\Exception
      * @throws \Neos\Flow\Persistence\Exception\IllegalObjectTypeException
      */
-    protected function buildRequestForTerm(string $term, string $contextNodeIdentifier, string $dimensionCombination = null): string
+    protected function buildRequestForTerm(string $term, NodeAddress $contextNodeAddress): string
     {
-        $cacheKey = $contextNodeIdentifier . '-' . md5($dimensionCombination);
+        $cacheKey = $contextNodeAddress->aggregateId->value . '-' . $contextNodeAddress->dimensionSpacePoint->hash;
         $termPlaceholder = '---term-soh2gufuNi---';
         $term = strtolower($term);
 
@@ -128,11 +134,11 @@ class SuggestController extends ActionController
         $suggestTerm = SearchTerm::sanitize(explode(' ', $term)[0]);
 
         if (!$this->elasticSearchQueryTemplateCache->has($cacheKey)) {
-            $contentContext = $this->createContentContext('live', $dimensionCombination ? json_decode($dimensionCombination, true) : []);
-            $contextNode = $contentContext->getNodeByIdentifier($contextNodeIdentifier);
+            $subgraph = $this->contentRepositoryRegistry->get($contextNodeAddress->contentRepositoryId)->getContentSubgraph(WorkspaceName::forLive(), $contextNodeAddress->dimensionSpacePoint);
+            $contextNode = $subgraph->findNodeById($contextNodeAddress->aggregateId);
 
-            if (!$contextNode instanceof NodeInterface) {
-                throw new \Exception(sprintf('The context node for search with identifier %s could not be found', $contextNodeIdentifier), 1634467679);
+            if (!$contextNode instanceof Node) {
+                throw new \Exception(sprintf('The context node for search with identifier %s could not be found', $contextNodeAddress->aggregateId->value), 1634467679);
             }
 
             $sourceFields = array_filter($this->searchAsYouTypeSettings['suggestions']['sourceFields'] ?? ['neos_path']);
@@ -178,7 +184,7 @@ class SuggestController extends ActionController
 
             $requestTemplate = json_encode($request);
 
-            $this->elasticSearchQueryTemplateCache->set($contextNodeIdentifier, $requestTemplate);
+            $this->elasticSearchQueryTemplateCache->set($contextNodeAddress->aggregateId->value, $requestTemplate);
         } else {
             $requestTemplate = $this->elasticSearchQueryTemplateCache->get($cacheKey);
         }

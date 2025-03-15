@@ -8,7 +8,7 @@ prototype(Flowpack.SearchPlugin:Search) < prototype(Neos.Neos:Content) {
 
     searchForm = Flowpack.SearchPlugin:Search.Form
 
-    configuration = Neos.Fusion:RawArray {
+    configuration = Neos.Fusion:DataStructure {
         itemsPerPage = 25
         insertAbove = false
         insertBelow = true

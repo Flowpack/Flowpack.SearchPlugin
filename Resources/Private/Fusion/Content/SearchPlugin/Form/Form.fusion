@@ -1,6 +1,5 @@
 prototype(Flowpack.SearchPlugin:Search.Form) < prototype(Neos.Fusion:Template) {
     node = ${site}
-    dimensionCombination = ${Json.stringify(this.node.context.dimensions)}
     templatePath = 'resource://Flowpack.SearchPlugin/Private/Fusion/Content/SearchPlugin/Form/Form.html'
 
     inputClassNames = ''

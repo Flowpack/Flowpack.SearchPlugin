@@ -16,7 +16,7 @@ namespace Flowpack\SearchPlugin\EelHelper;
 use Flowpack\SearchPlugin\Exception;
 use Flowpack\SearchPlugin\Suggestion\SuggestionContextInterface;
 use Flowpack\SearchPlugin\Utility\SearchTerm;
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Eel\ProtectedContextAwareInterface;
 use Neos\Flow\Annotations as Flow;
 
@@ -25,12 +25,6 @@ use Neos\Flow\Annotations as Flow;
  */
 class SuggestionIndexHelper implements ProtectedContextAwareInterface
 {
-
-    /**
-     * Rhe length of '/sites/'
-     * @var int
-     */
-    protected const SITES_OFFSET = 7;
 
     /**
      * @Flow\Inject
@@ -52,7 +46,7 @@ class SuggestionIndexHelper implements ProtectedContextAwareInterface
         ];
     }
 
-    public function buildContext(NodeInterface $node): string
+    public function buildContext(Node $node): string
     {
         return (string)($this->suggestionContext->buildForIndex($node));
     }
