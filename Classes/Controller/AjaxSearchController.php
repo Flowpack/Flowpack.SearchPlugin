@@ -1,4 +1,5 @@
 <?php
+
 namespace Flowpack\SearchPlugin\Controller;
 
 /*
@@ -11,8 +12,7 @@ namespace Flowpack\SearchPlugin\Controller;
  * source code.
  */
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\Flow\Annotations as Flow;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Neos\View\FusionView;
 
@@ -27,11 +27,11 @@ class AjaxSearchController extends ActionController
     protected $defaultViewObjectName = FusionView::class;
 
     /**
-     * @param NodeInterface $node
+     * @param Node $node
      *
      * @return void
      */
-    public function searchAction(NodeInterface $node)
+    public function searchAction(Node $node)
     {
         /* @var FusionView $view */
         $view = $this->view;

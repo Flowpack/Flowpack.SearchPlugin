@@ -13,22 +13,21 @@ declare(strict_types=1);
 
 namespace Flowpack\SearchPlugin\Suggestion;
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 
 interface SuggestionContextInterface
 {
+    /**
+     * Build the context from a given node
+     * @param Node $node
+     */
+    public function buildForIndex(Node $node): SuggestionContextInterface;
 
     /**
      * Build the context from a given node
-     * @param NodeInterface $node
+     * @param Node $node
      */
-    public function buildForIndex(NodeInterface $node): SuggestionContextInterface;
-
-    /**
-     * Build the context from a given node
-     * @param NodeInterface $node
-     */
-    public function buildForSearch(NodeInterface $node): SuggestionContextInterface;
+    public function buildForSearch(Node $node): SuggestionContextInterface;
 
     /**
      * Returns the calculated context identifier
