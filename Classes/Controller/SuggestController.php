@@ -95,6 +95,13 @@ class SuggestController extends ActionController
             return;
         }
 
+        if ($contextNodeIdentifier === '') {
+            $this->response->setStatusCode(400);
+            $result['errors'] = ['contextNodeIdentifier must not be empty'];
+            $this->view->assign('value', $result);
+            return;
+        }
+
         $requestJson = $this->buildRequestForTerm($term, $contextNodeIdentifier, $dimensionCombination);
 
         try {
